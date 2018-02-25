@@ -10,13 +10,17 @@ def index():
 def register():
     return render_template('register.html')
 
-@app.route('/email-confirmation')
-def email_confirmation():
-    return ''
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/documents')
+def documents_list():
+    return render_template('documents_list.html')
 
 @app.route('/documents/<int:id>')
 def view_document(id):
-    return str(id);
+    return render_template('document.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
