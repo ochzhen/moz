@@ -1,7 +1,7 @@
 from flask import render_template, Blueprint, current_app
+from app import db
 
-main = Blueprint('main', __name__,
-                 template_folder='templates')
+main = Blueprint('main', __name__, template_folder='templates')
 
 
 @main.route('/')
@@ -10,14 +10,14 @@ def index():
     return render_template('home.html')
 
 
-@main.route('/register')
-def register():
-    return render_template('register.html')
+@main.route('/signup')
+def signup():
+    return render_template('signup.html')
 
 
-@main.route('/login')
-def login():
-    return render_template('login.html')
+@main.route('/signin')
+def signin():
+    return render_template('signin.html')
 
 
 @main.route('/documents')
