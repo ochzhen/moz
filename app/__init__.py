@@ -27,7 +27,7 @@ def create_tables():
         db.create_tables([User, Role, UserRoles])
 
 
-from app.main.controllers import main as main_module
+from app.main.views import main as main_module
 app.register_blueprint(main_module)
 
 
