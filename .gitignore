@@ -5,3 +5,5 @@ venv/
 *.pyc
 venv
 moz.db
+!media/moz/.gitkeep
+media/*
