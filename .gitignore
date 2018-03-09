@@ -6,4 +6,3 @@ venv/
 media/*
 */migrations
 *.sqlite3
-

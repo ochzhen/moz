@@ -1,0 +1,4 @@
+Django==1.11.11
+Jinja2==2.10
+MarkupSafe==1.0
+pytz==2018.3
