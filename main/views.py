@@ -1,5 +1,5 @@
 from flask import render_template, Blueprint, current_app
-from moz import db
+
 
 main = Blueprint('main', __name__, template_folder='templates')
 
@@ -28,3 +28,8 @@ def documents_list():
 @main.route('/documents/<int:id>')
 def view_document(id):
     return render_template('document.html')
+
+
+@main.errorhandler(404)
+def not_found(error):
+    return render_template('404.html')
