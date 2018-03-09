@@ -1,0 +1,8 @@
+venv/
+.idea/
+.vscode/
+*.log
+*.pyc
+media/*
+*/migrations
+*.sqlite3
