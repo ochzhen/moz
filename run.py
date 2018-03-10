@@ -1,4 +1,4 @@
-from __init__ import app
+from moz import app
 from config import DEBUG
 
 

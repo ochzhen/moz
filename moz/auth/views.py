@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, flash, redirect, url_for
 from flask_login import current_user, login_user, logout_user, login_required
-from auth.forms import LoginForm, RegistrationForm
+from moz.auth.forms import LoginForm, RegistrationForm
 
 auth = Blueprint('auth', __name__, template_folder='templates')
 
@@ -11,7 +11,7 @@ def login():
         return redirect(url_for('main.index'))
     form = LoginForm()
     if form.validate_on_submit():
-        from auth.models import User
+        from moz.auth.models import User
         user = User.select().where((User.email == form.email.data)).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
@@ -34,7 +34,7 @@ def register():
         return redirect(url_for('main.index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        from auth.models import User
+        from moz.auth.models import User
         user = User(email=form.email.data,
                     full_name=form.full_name.data,
                     education=form.education.data,

@@ -4,3 +4,4 @@ venv/
 *.log
 *.pyc
 venv
+moz.db
