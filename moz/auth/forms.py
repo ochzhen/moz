@@ -23,7 +23,7 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def validate_email(self, email):
-        from auth.models import User
+        from moz.auth.models import User
         user = User.select().where((User.email==email.data)).first()
         if user is not None:
             raise ValidationError('Please use a different email address.')

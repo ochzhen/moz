@@ -1,13 +1,12 @@
 from peewee import Model, TextField, BooleanField, DateTimeField, CharField, ForeignKeyField
-from moz import db, test_db, login
+from moz import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from moz import login
 
 
 class BaseModel(Model):
     class Meta:
-        database = test_db
+        database = db
 
 
 class User(UserMixin, BaseModel):

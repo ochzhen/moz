@@ -1,6 +1,5 @@
 from flask import render_template, Blueprint, current_app
 from flask_login import login_required
-from moz import db
 
 main = Blueprint('main', __name__, template_folder='templates')
 
