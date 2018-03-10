@@ -5,7 +5,6 @@ main = Blueprint('main', __name__, template_folder='templates')
 
 
 @main.route('/')
-@login_required
 def index():
     current_app.logger.debug("Hello %s", "world")
     return render_template('home.html')

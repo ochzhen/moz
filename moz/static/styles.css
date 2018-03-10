@@ -67,3 +67,10 @@ body {
     border-bottom: 0;
   }
 }
+
+
+.error-list {
+  color: red;
+  list-style: none;
+  padding: 0;
+}

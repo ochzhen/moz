@@ -1,26 +1,29 @@
+# coding: utf-8
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, SubmitField, PasswordField
 from wtforms.validators import DataRequired, EqualTo, Email, ValidationError
 
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+    email = StringField('Email', validators = [DataRequired(message=u'Обов\'язкове поле')])
+    password = PasswordField(u'Пароль', validators = [DataRequired(message=u'Обов\'язкове поле')])
+    remember_me = BooleanField(u'Запам\'ятати мене')
+    submit = SubmitField(u'Увійти')
 
 
-class RegistrationForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    full_name = StringField('Full name')
-    education = StringField('Education')
-    occupation = StringField('Occupation')
-    terms = BooleanField("I agree with terms of use")
-    is_medical = BooleanField("I confirm that I'm medical worker")
-    submit = SubmitField('Register')
+class RegisterForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(message=u'Обов\'язкове поле'), Email()])
+    password = PasswordField(u'Пароль', validators=[DataRequired(message=u'Обов\'язкове поле')])
+    confirm_password = PasswordField(
+        u'Підтвердіть пароль', validators=[DataRequired(message=u'Обов\'язкове поле'), EqualTo('password')])
+    first_name = StringField(u'Ім\'я', validators=[DataRequired(message=u'Обов\'язкове поле')])
+    last_name = StringField(u'Прізвище', validators=[DataRequired(message=u'Обов\'язкове поле')])
+    education = StringField(u'Спеціальність', validators=[DataRequired(message=u'Обов\'язкове поле')])
+    occupation = StringField(u'Місце роботи', validators=[DataRequired(message=u'Обов\'язкове поле')])
+    terms = BooleanField(u'Я погоджуюся з умовами використання.', validators=[DataRequired(message=u'Обов\'язкове поле')])
+    is_medical = BooleanField(u'Я підтверджую, що я медичний співробітник.', validators=[DataRequired(message=u'Обов\'язкове поле')])
+    submit = SubmitField(u'Зареєструвати')
 
     def validate_email(self, email):
         from moz.auth.models import User

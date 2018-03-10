@@ -1,13 +1,13 @@
 {% extends 'layout.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Головна{% endblock %}
 
 {% block body %}
 
-<div class="jumbotron jumbotron-register" style="">
+<div class="jumbotron jumbotron-register">
   <h3>Jumbotron heading</h3>
   <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-  <p><a class="btn btn-lg btn-success" href="/signup" role="button">Sign up</a></p>
+  <p><a class="btn btn-lg btn-success" href="{{url_for('auth.login')}}" role="button">Sign up</a></p>
 </div>
 
 <div class="well">

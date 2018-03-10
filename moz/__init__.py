@@ -31,11 +31,11 @@ db = SqliteDatabase('moz.db')
 # )
 
 
-from moz.auth.models import User, Role, UserRoles
+from moz.auth.models import User
 
 def create_tables():
     with db:
-        db.create_tables([User, Role, UserRoles])
+        db.create_tables([User])
 
 
 from main.views import main as main_module
