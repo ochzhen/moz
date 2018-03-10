@@ -23,7 +23,9 @@ from settings import DEBUG, MEDIA_URL, MEDIA_ROOT
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', views.index)
+    url(r'^$', views.index),
+    url(r'^documents/', views.documents),
+    url(r'^signin/', views.signin)
 ]
 
 handler404 = views.error404

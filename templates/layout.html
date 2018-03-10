@@ -1,26 +1,27 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="icon" href="static/moz_favicon.png">
+    <link rel="icon" href="{% static "moz_favicon.png" %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link href="static/styles.css" rel="stylesheet">
-  </head>
-  <body>
-    <div class="container">
-      {% include 'includes/_header.html' %}
+    <link href="{% static "styles.css" %}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    {% include 'includes/_header.html' %}
 
-      {% block body %} {% endblock %}
+    {% block body %} {% endblock %}
 
-      <footer class="footer">
+    <footer class="footer">
         <p>&copy; 2018 Company, Inc.</p>
-      </footer>
-    </div>
+    </footer>
+</div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
 </html>

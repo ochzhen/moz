@@ -1,14 +1,15 @@
+{% load static %}
 <div class="header clearfix">
-  <a href="http://moz.gov.ua/" target="_blank" class="moz-icon-link">
-      <img src="static/MOHLogoUa.png" alt="Ministy of Health" width="150px" />
-  </a>
-  <nav>
-    <ul class="nav nav-pills">
-      <li role="presentation"><a href="/">Home</a></li>
-      <li role="presentation"><a href="/documents">Documents</a></li>
-      <li role="presentation"><a href="http://moz.gov.ua/" target="_blank">Ministry of Health</a></li>
-    </ul>
-  </nav>
+    <a href="http://moz.gov.ua/" target="_blank" class="moz-icon-link">
+        <img src="{% static "MOHLogoUa.png" %}" alt="Ministy of Health" width="150px"/>
+    </a>
+    <nav>
+        <ul class="nav nav-pills">
+            <li role="presentation"><a href="/">Home</a></li>
+            <li role="presentation"><a href="/documents">Documents</a></li>
+            <li role="presentation"><a href="http://moz.gov.ua/" target="_blank">Ministry of Health</a></li>
+        </ul>
+    </nav>
 </div>
 
 <style>
@@ -17,6 +18,7 @@
         align-items: center;
         justify-content: flex-end;
     }
+
     .moz-icon-link {
         margin-right: auto;
     }
