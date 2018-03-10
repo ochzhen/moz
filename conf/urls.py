@@ -19,14 +19,16 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from moz import views
-from settings import DEBUG, MEDIA_URL, MEDIA_ROOT
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index),
-    url(r'^documents/', views.documents),
-    url(r'^signin/', views.signin)
+    url(r'^documents/$', views.documents),
+    url(r'^documents/(?P<id>[0-9]+)/$', views.document),
+    url(r'^signin/$', views.signin)
+
 ]
+from settings import DEBUG, MEDIA_URL, MEDIA_ROOT
 
 handler404 = views.error404
 

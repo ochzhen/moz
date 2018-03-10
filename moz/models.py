@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import os
 from django.contrib.auth.models import User, AbstractUser
 from django.db import models
 from django.utils import timezone
@@ -24,6 +25,10 @@ class MOZDocument(models.Model):
     def get_document(self):
         if self.document:
             return u'%s' % self.document.url
+
+    def get_document_name(self):
+        if self.document:
+            return os.path.basename(self.document.path)
 
 
 # Check this small example to understand how we can extend django User model

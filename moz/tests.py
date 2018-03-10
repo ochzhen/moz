@@ -29,3 +29,6 @@ class MOZDocumentTestCase(TestCase):
     def test_get_order_by_title_desc(self):
         self.assertEqual('Document3', get_all_documents_order_by_title(True)[0].title)
         self.assertEqual('Document3', get_number_of_documents_order_by_title(1, True)[0].title)
+
+    def test_get_by_id(self):
+        self.assertEqual('Document1', get_document_by_id(1).title)

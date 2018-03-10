@@ -1,0 +1,87 @@
+{% extends 'layout.html' %} {% block body %}
+    <section>
+        <article>
+            <div class="article-content">
+                <h2>{{ document.title }}</h2>
+                <p>{{ document.content }}</p>
+                <p>
+                    <a href="{{ document.get_document }}">
+                        <i class="fa fa-file-pdf-o" style="font-size:32px;color:red"></i>
+                        <strong> {{ document.get_document_name }} </strong>
+                    </a>
+                </p>
+            </div>
+        </article>
+    </section>
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 300;
+            src: local('Open Sans Light'), local('OpenSans-Light'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/DXI1ORHCpsQm3Vp6mXoaTaRDOzjiPcYnFooOUGCOsRk.woff) format('woff');
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Open Sans'), local('OpenSans'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3bO3LdcAZYWl9Si6vvxL-qU.woff) format('woff');
+        }
+
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 600;
+            src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/MTP_ySUJH_bn48VBG8sNSqRDOzjiPcYnFooOUGCOsRk.woff) format('woff');
+        }
+
+        html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, hr, a, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strong, sub, sup, tt, var, b, u, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #f4f4f1;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        section {
+            position: relative;
+            padding: 0 30px;
+        }
+
+        article {
+            position: relative;
+            width: 100%;
+            margin: 80px auto 0;
+            z-index: 500;
+            background: #ffffff;
+            padding: 80px 80px 70px;
+            border-right: 1px solid #f4f4f1;
+            border-bottom: 1px solid #f4f4f1;
+        }
+
+        article h2 {
+            color: #283f53;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        article p {
+            margin-top: 18px;
+            color: #404649;
+            font-weight: 400;
+        }
+
+        a:hover, a:visited, a:link, a:active {
+            text-decoration: none;
+        }
+
+    </style>
+{% endblock %}

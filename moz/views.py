@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 
 from moz.forms import SigninForm
-from service import get_all_documents_order_by_title
+from service import get_all_documents_order_by_title, get_document_by_id
 
 
 # Create your views here.
@@ -30,6 +30,13 @@ def documents(request):
         'documents': get_all_documents_order_by_title()
     }
     return render(request, 'documents_list.html', data)
+
+
+def document(request, id):
+    data = {
+        'document': get_document_by_id(id)
+    }
+    return render(request, 'document.html', data)
 
 
 def error404(request):
