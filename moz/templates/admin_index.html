@@ -1,0 +1,133 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:700|Oswald' rel='stylesheet' type='text/css'>
+
+
+    <section id="postIndex" class="widthWrapper">
+
+        <article>
+            <h2>Вітаємо на адмін порталі сайту</h2>
+            <p>
+                Оберіть зверху одну із категорій для адміністрування.
+            </p>
+
+        </article>
+
+
+    </section>
+    <style>
+
+
+        img {
+            border: none;
+        }
+
+        /* Global Styles */
+        body {
+            line-height: 1.55;
+            font-size: 150%;
+            font-weight: 400;
+            font-family: helvetica, arial, sans-serif;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 1.55em;
+            padding-bottom: .35em;
+        }
+
+        a {
+            text-decoration: none;
+            font-weight: bold;
+            font-weight: 400;
+        }
+
+        .widthWrapper {
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        /* Post Index */
+        #postIndex {
+            margin: 3em auto;
+        }
+
+        article {
+            margin-top: -0.063em;
+        }
+
+        article a {
+            display: block;
+            padding: 2.374em 2.5em 2.5em 2.5em;
+            overflow: hidden;
+            border-top: .063em solid #ccc;
+            border-bottom: .063em solid #ccc;
+        }
+
+        article a:hover {
+            background: #eee;
+            border-top: #666 solid .25em;
+            padding: 2.187em 2.5em 2.5em 2.5em;
+        }
+
+        .postImg {
+            float: left;
+            width: 25%;
+            box-sizing: border-box;
+            padding-right: 2em;
+        }
+
+        .postImg img {
+            width: 100%;
+        }
+
+        article a h2 {
+            color: #222;
+            float: right;
+            width: 75%;
+        }
+
+        article a:hover h2 {
+            color: #157EBF;
+        }
+
+        article a p {
+            color: #444;
+            float: right;
+            width: 75%;
+        }
+
+        article a:hover p {
+            color: #222;
+        }
+
+        @media only screen and (max-width: 750px) {
+            #postIndex {
+                width: 100%;
+            }
+
+            article a {
+                padding: 2.374em 1.5em 2.5em 1.5em;
+            }
+
+            article a:hover {
+                padding: 2.187em 1.5em 2.5em 1.5em;
+            }
+        }
+
+        @media only screen and (max-width: 481px) {
+
+            article a p, article a h2 {
+                width: 100%;
+            }
+
+        }
+    </style>
+{% endblock %}
+

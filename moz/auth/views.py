@@ -43,10 +43,14 @@ def register():
     if form.validate_on_submit():
         from moz.auth.models import User
         user = User(email=form.email.data,
-                    full_name=form.full_name.data,
-                    education=form.education.data,
-                    occupation=form.occupation.data,
-                    is_medical=form.is_medical.data)
+                    active=False,
+                    is_admin=False,
+                    registered_at=datetime.datetime.now(),
+                    first_name=form.first_name.data,
+                    last_name=form.last_name.data,
+                    speciality=form.education.data,
+                    occupation=form.occupation.data
+        )
         user.set_password(form.password.data)
         user.save()
         token = generate_confirmation_token(user.email)

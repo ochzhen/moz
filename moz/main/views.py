@@ -20,3 +20,8 @@ def documents_list():
 @login_required
 def view_document(id):
     return render_template('document.html')
+
+
+@main.errorhandler(404)
+def not_found(error):
+    return render_template('404.html')
