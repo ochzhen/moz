@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_login import LoginManager
+from flask_mail import Mail
 from peewee import SqliteDatabase
 
 app = Flask(__name__)
@@ -9,6 +10,8 @@ app.config.from_object('config')
 login = LoginManager()
 login.init_app(app)
 login.login_view = 'auth.login'
+
+mail = Mail(app)
 
 
 @login.user_loader
@@ -43,3 +46,4 @@ from auth.views import auth as auth_module
 
 app.register_blueprint(main_module)
 app.register_blueprint(auth_module)
+

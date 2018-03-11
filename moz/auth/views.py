@@ -1,8 +1,13 @@
 # coding: utf-8
-
+from datetime import datetime
 from flask import render_template, Blueprint, flash, redirect, url_for
 from flask_login import current_user, login_user, logout_user, login_required
+from flask_security.confirmable import generate_confirmation_token
+
+from moz import User
+from moz.auth.email import send_email
 from moz.auth.forms import LoginForm, RegisterForm
+from moz.auth.token import confirm_token
 
 auth = Blueprint('auth', __name__, template_folder='templates')
 
@@ -41,10 +46,37 @@ def register():
                     full_name=form.full_name.data,
                     education=form.education.data,
                     occupation=form.occupation.data,
-                    terms=form.terms.data,
                     is_medical=form.is_medical.data)
         user.set_password(form.password.data)
         user.save()
-        flash(u'Congratulations, you are now a registered user!')
-        return redirect(url_for('auth.login'))
-    return render_template('register.html', title='Register', form=form)
+        token = generate_confirmation_token(user.email)
+        confirm_url = url_for('user.confirm_email', token=token, _external=True)
+        html = render_template('confirm.html', confirm_url=confirm_url)
+        subject = "Please confirm your email"
+        send_email(user.email, subject, html)
+
+        login_user(user)
+
+        flash('A confirmation email has been sent via email.', 'success')
+        flash('Congratulations, you are now a registered user!')
+        # return redirect(url_for('auth.login'))
+        return redirect(url_for("main.index"))
+    return render_template('signup.html', title='Register', form=form)
+
+
+@auth.route('/confirm/<token>')
+@login_required
+def confirm_email(token):
+    try:
+        email = confirm_token(token)
+    except:
+        flash('The confirmation link is invalid or has expired.', 'danger')
+    user = User.select().where((User.email == email)).first_or_404()
+    if user.confirmed:
+        flash('Account already confirmed. Please login.', 'success')
+    else:
+        user.confirmed = True
+        user.confirmed_on = datetime.now()
+        user.save()
+        flash('You have confirmed your account. Thanks!', 'success')
+    return redirect(url_for('main.index'))

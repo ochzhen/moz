@@ -1,4 +1,5 @@
-from peewee import Model, TextField, BooleanField, DateTimeField, datetime
+from datetime import datetime
+from peewee import Model, TextField, BooleanField, DateTimeField
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from moz import db
@@ -14,12 +15,11 @@ class User(UserMixin, BaseModel):
     password = TextField()
     active = BooleanField(default=True)
     confirmed_at = DateTimeField(null=True)
-    registered_at = DateTimeField(default=datetime.datetime.now)
+    registered_at = DateTimeField(default=datetime.now)
     first_name = TextField()
     last_name = TextField()
     speciality = TextField()
     occupation = TextField()
-
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
