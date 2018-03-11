@@ -45,7 +45,7 @@ def register():
         user = User(email=form.email.data,
                     active=False,
                     is_admin=False,
-                    registered_at=datetime.datetime.now(),
+                    registered_at=datetime.now(),
                     first_name=form.first_name.data,
                     last_name=form.last_name.data,
                     speciality=form.education.data,
@@ -65,7 +65,7 @@ def register():
         flash('Congratulations, you are now a registered user!')
         # return redirect(url_for('auth.login'))
         return redirect(url_for("main.index"))
-    return render_template('signup.html', title='Register', form=form)
+    return render_template('register.html', title='Register', form=form)
 
 
 @auth.route('/confirm/<token>')

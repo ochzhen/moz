@@ -55,6 +55,8 @@ from main.admin import MOZDocumentAdmin, CategoryAdmin, ProtectedIndex, UserAdmi
 # )
 
 
+from moz.auth.models import User
+
 def create_tables():
     with db:
         db.create_tables([User, MOZDocument, Category])
@@ -83,6 +85,7 @@ def create_admin_user():
 
 app.register_blueprint(main_module)
 app.register_blueprint(auth_module)
+
 
 create_tables()
 create_admin_user()
