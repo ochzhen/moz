@@ -1,3 +1,4 @@
+import sys
 from moz import app
 from config import DEBUG
 
