@@ -1,6 +1,8 @@
 from flask import render_template, Blueprint, current_app
 from flask_login import login_required
 
+from moz.auth.email import confirmed_email
+
 main = Blueprint('main', __name__, template_folder='templates')
 
 
@@ -12,6 +14,7 @@ def index():
 
 @main.route('/documents')
 @login_required
+@confirmed_email
 def documents_list():
     return render_template('documents_list.html')
 

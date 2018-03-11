@@ -8,9 +8,7 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from peewee import SqliteDatabase, DoesNotExist
 
-from auth.views import auth as auth_module
 from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR
-from main.views import main as main_module
 from flask_babelex import Babel
 
 app = Flask(__name__)
@@ -56,6 +54,7 @@ from main.admin import MOZDocumentAdmin, CategoryAdmin, ProtectedIndex, UserAdmi
 
 
 from moz.auth.models import User
+from main.views import main as main_module
 
 def create_tables():
     with db:
@@ -82,6 +81,8 @@ def create_admin_user():
     user.set_password(DEFAULT_ADMIN_PASSWORD)
     user.save()
 
+
+from auth.views import auth as auth_module
 
 app.register_blueprint(main_module)
 app.register_blueprint(auth_module)

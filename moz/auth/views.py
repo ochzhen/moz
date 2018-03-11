@@ -4,7 +4,6 @@ from flask import render_template, Blueprint, flash, redirect, url_for
 from flask_login import current_user, login_user, logout_user, login_required
 from flask_security.confirmable import generate_confirmation_token
 
-from moz import User
 from moz.auth.email import send_email
 from moz.auth.forms import LoginForm, RegisterForm
 from moz.auth.token import confirm_token
@@ -75,6 +74,7 @@ def confirm_email(token):
         email = confirm_token(token)
     except:
         flash('The confirmation link is invalid or has expired.', 'danger')
+    from moz.auth.models import User
     user = User.select().where((User.email == email)).first_or_404()
     if user.confirmed:
         flash('Account already confirmed. Please login.', 'success')
@@ -84,3 +84,10 @@ def confirm_email(token):
         user.save()
         flash('You have confirmed your account. Thanks!', 'success')
     return redirect(url_for('main.index'))
+
+
+@auth.route('/unconfirmed')
+@login_required
+def unconfirmed():
+    flash('Please confirm your account!', 'warning')
+    return render_template('unconfirmed.html')
