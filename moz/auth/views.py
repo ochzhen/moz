@@ -1,5 +1,5 @@
 # coding: utf-8
-
+import datetime
 from flask import render_template, Blueprint, flash, redirect, url_for
 from flask_login import current_user, login_user, logout_user, login_required
 from moz.auth.forms import LoginForm, RegisterForm
@@ -38,11 +38,14 @@ def register():
     if form.validate_on_submit():
         from moz.auth.models import User
         user = User(email=form.email.data,
-                    full_name=form.full_name.data,
-                    education=form.education.data,
-                    occupation=form.occupation.data,
-                    terms=form.terms.data,
-                    is_medical=form.is_medical.data)
+                    active=False,
+                    is_admin=False,
+                    registered_at=datetime.datetime.now(),
+                    first_name=form.first_name.data,
+                    last_name=form.last_name.data,
+                    speciality=form.education.data,
+                    occupation=form.occupation.data
+                    )
         user.set_password(form.password.data)
         user.save()
         flash(u'Congratulations, you are now a registered user!')

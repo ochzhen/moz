@@ -1,14 +1,29 @@
+# coding=utf-8
+import datetime
+
+import flask_admin as admin
+import os
 from flask import Flask, render_template
 from flask_login import LoginManager
-from peewee import SqliteDatabase
+from peewee import SqliteDatabase, DoesNotExist
+
+from auth.views import auth as auth_module
+from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR
+from main.views import main as main_module
+from flask_babelex import Babel
 
 app = Flask(__name__)
-
+babel = Babel(app)
 app.config.from_object('config')
 
 login = LoginManager()
 login.init_app(app)
 login.login_view = 'auth.login'
+
+
+@babel.localeselector
+def get_locale():
+    return 'uk'
 
 
 @login.user_loader
@@ -21,7 +36,13 @@ def not_found(error):
     return render_template('404.html')
 
 
-db = SqliteDatabase('moz.db')
+db = SqliteDatabase(os.path.join(BASE_DIR, 'moz.db'))
+
+from moz.auth.models import User
+from main.models import MOZDocument, Category
+from main.admin import MOZDocumentAdmin, CategoryAdmin, ProtectedIndex, UserAdmin
+
+
 # db = MySQLDatabase(
 #     app.config['DB_NAME'],
 #     user=app.config['DB_USER'],
@@ -31,15 +52,38 @@ db = SqliteDatabase('moz.db')
 # )
 
 
-from moz.auth.models import User
-
 def create_tables():
     with db:
-        db.create_tables([User])
+        db.create_tables([User, MOZDocument, Category])
 
 
-from main.views import main as main_module
-from auth.views import auth as auth_module
+def create_admin_user():
+    try:
+        User.get(User.email == DEFAULT_ADMIN_USER)
+        return
+    except DoesNotExist:
+        pass
+
+    user = User(email=DEFAULT_ADMIN_USER,
+                active=True,
+                is_admin=True,
+                registered_at=datetime.datetime.now(),
+                first_name='Admin',
+                last_name='Admin',
+                speciality='Admin',
+                occupation='Admin',
+                confirmed_at=datetime.datetime.now()
+                )
+    user.set_password(DEFAULT_ADMIN_PASSWORD)
+    user.save()
+
 
 app.register_blueprint(main_module)
 app.register_blueprint(auth_module)
+create_tables()
+create_admin_user()
+adm = admin.Admin(app, template_mode='bootstrap3', name='moz', url=ADMIN_PATH,
+                  index_view=ProtectedIndex())
+adm.add_view(UserAdmin(User, name=u'Користувачі'))
+adm.add_view(CategoryAdmin(Category, name=u'Категорії'))
+adm.add_view(MOZDocumentAdmin(MOZDocument, name=u'Документи МОЗ'))
