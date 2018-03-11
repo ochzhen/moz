@@ -8,7 +8,6 @@ from flask_login import LoginManager
 from peewee import SqliteDatabase, DoesNotExist
 
 from auth.views import auth as auth_module
-
 from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR
 from main.views import main as main_module
 from flask_babelex import Babel
