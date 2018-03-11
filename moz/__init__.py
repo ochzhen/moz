@@ -9,7 +9,7 @@ from peewee import SqliteDatabase, DoesNotExist
 
 from auth.views import auth as auth_module
 from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR
-from main.views import main as main_module
+
 from flask_babelex import Babel
 
 app = Flask(__name__)
@@ -77,6 +77,8 @@ def create_admin_user():
     user.set_password(DEFAULT_ADMIN_PASSWORD)
     user.save()
 
+
+from main.views import main as main_module
 
 app.register_blueprint(main_module)
 app.register_blueprint(auth_module)
