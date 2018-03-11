@@ -2,12 +2,13 @@
 import datetime
 
 import flask_admin as admin
+import os
 from flask import Flask, render_template
 from flask_login import LoginManager
 from peewee import SqliteDatabase, DoesNotExist
 
 from auth.views import auth as auth_module
-from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER
+from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR
 from main.views import main as main_module
 from flask_babelex import Babel
 
@@ -35,7 +36,7 @@ def not_found(error):
     return render_template('404.html')
 
 
-db = SqliteDatabase(u'/Users/arsenzhd/Documents/projects/moz/moz.db')
+db = SqliteDatabase(os.path.join(BASE_DIR, 'moz.db'))
 
 from moz.auth.models import User
 from main.models import MOZDocument, Category
