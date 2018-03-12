@@ -41,12 +41,11 @@ def get_moz_document(filename):
 @login_required
 def search():
     query = request.args.get('query')
-    if query:
-        query = u"%s" % query
-        documents = get_documents_for_query(query)
-        current_app.logger.info(u"Found documents: %s for query: %s", documents, query)
-        return render_template('search.html', query=query, documents=documents)
-    return abort(404)
+    query = query if query else ""
+    query = u"%s" % query
+    documents = get_documents_for_query(query)
+    current_app.logger.info(u"Found documents: %s for query: %s", documents, query)
+    return render_template('search.html', query=query, documents=documents)
 
 
 @main.errorhandler(404)
