@@ -1,10 +1,10 @@
 import os
 
-from flask import render_template, Blueprint, current_app, send_from_directory
+from flask import render_template, Blueprint, current_app, send_from_directory, request, abort
 from flask_login import login_required
 
 from config import MEDIA_URL, MEDIA_ROOT
-from services import get_categories_with_documents
+from services import get_categories_with_documents, get_documents_for_query
 
 main = Blueprint('main', __name__, template_folder='templates')
 
@@ -35,6 +35,18 @@ def get_moz_document(filename):
     folder = os.path.join(MEDIA_ROOT, 'moz')
     current_app.logger.info("Looking for file %s in folder %s", filename, folder)
     return send_from_directory(folder, filename)
+
+
+@main.route('/search')
+@login_required
+def search():
+    query = request.args.get('query')
+    if query:
+        query = u"%s" % query
+        documents = get_documents_for_query(query)
+        current_app.logger.info(u"Found documents: %s for query: %s", documents, query)
+        return render_template('search.html', query=query, documents=documents)
+    return abort(404)
 
 
 @main.errorhandler(404)
