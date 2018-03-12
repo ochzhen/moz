@@ -1,14 +1,20 @@
 <div class="header clearfix">
-  <a href="http://moz.gov.ua/" target="_blank" class="moz-icon-link">
-      <img src="static/MOHLogoUa.png" alt="Ministy of Health" width="150px" />
-  </a>
-  <nav>
-    <ul class="nav nav-pills">
-      <li role="presentation"><a href="{{url_for('main.index')}}">Головна</a></li>
-      <li role="presentation"><a href="{{url_for('main.documents_list')}}">Документи</a></li>
-      <li role="presentation"><a href="http://moz.gov.ua/" target="_blank">МОЗ</a></li>
-    </ul>
-  </nav>
+    <a href="http://moz.gov.ua/" target="_blank" class="moz-icon-link">
+        <img src="static/MOHLogoUa.png" alt="Ministy of Health" width="150px" />
+    </a>
+    <nav>
+        <ul class="nav nav-pills">
+        <li role="presentation"><a href="{{url_for('main.index')}}">Головна</a></li>
+        <li role="presentation"><a href="{{url_for('main.documents_list')}}">Документи</a></li>
+        {% if current_user.is_authenticated %}
+            <li role="presentation"><a href="{{url_for('auth.logout')}}">Вихід</a></li>
+        {% else %}
+            <li role="presentation"><a href="{{url_for('auth.login')}}">Вхід</a></li>
+            <li role="presentation"><a href="{{url_for('auth.register')}}">Реєстрація</a></li>
+        {% endif %}
+        <!-- <li role="presentation"><a href="http://moz.gov.ua/" target="_blank">Сайт МОЗ</a></li> -->
+        </ul>
+    </nav>
 </div>
 
 <style>
