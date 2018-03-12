@@ -32,7 +32,7 @@ def view_document(id):
 @main.route(app.config.get('MEDIA_URL') + '/<filename>')
 @login_required
 def get_moz_document(filename):
-    folder = os.path.join(app.config('MEDIA_ROOT'), 'moz')
+    folder = os.path.join(app.config.get('MEDIA_ROOT'), 'moz')
     current_app.logger.info("Looking for file %s in folder %s", filename, folder)
     return send_from_directory(folder, filename)
 
