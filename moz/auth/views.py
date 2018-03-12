@@ -38,14 +38,14 @@ def register():
     if form.validate_on_submit():
         from moz.auth.models import User
         user = User(
-            email = form.email.data,
-            active = False,
-            is_admin = False,
-            registered_at = datetime.datetime.now(),
-            first_name = form.first_name.data,
-            last_name = form.last_name.data,
-            speciality = form.speciality.data,
-            occupation = form.occupation.data
+            email=form.email.data,
+            active=False,
+            is_admin=False,
+            registered_at=datetime.datetime.now(),
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
+            speciality=form.speciality.data,
+            occupation=form.occupation.data
         )
         user.set_password(form.password.data)
         user.save()

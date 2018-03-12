@@ -8,8 +8,8 @@ from flask_login import LoginManager
 from peewee import SqliteDatabase, DoesNotExist
 
 from auth.views import auth as auth_module
-from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR
-from main.views import main as main_module
+from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR, DEBUG
+
 from flask_babelex import Babel
 
 app = Flask(__name__)
@@ -78,10 +78,13 @@ def create_admin_user():
     user.save()
 
 
+from main.views import main as main_module
+
 app.register_blueprint(main_module)
 app.register_blueprint(auth_module)
-create_tables()
-create_admin_user()
+if DEBUG:
+    create_tables()
+    create_admin_user()
 adm = admin.Admin(app, template_mode='bootstrap3', name='moz', url=ADMIN_PATH,
                   index_view=ProtectedIndex())
 adm.add_view(UserAdmin(User, name=u'Користувачі'))
