@@ -3,7 +3,7 @@ import os
 from flask import render_template, Blueprint, current_app, send_from_directory, request, abort
 from flask_login import login_required
 
-from config import MEDIA_URL, MEDIA_ROOT
+from moz import app
 from services import get_categories_with_documents, get_documents_for_query
 
 main = Blueprint('main', __name__, template_folder='templates')
@@ -29,10 +29,10 @@ def view_document(id):
     return render_template('document.html')
 
 
-@main.route(MEDIA_URL + '/<filename>')
+@main.route(app.config.get('MEDIA_URL') + '/<filename>')
 @login_required
 def get_moz_document(filename):
-    folder = os.path.join(MEDIA_ROOT, 'moz')
+    folder = os.path.join(app.config('MEDIA_ROOT'), 'moz')
     current_app.logger.info("Looking for file %s in folder %s", filename, folder)
     return send_from_directory(folder, filename)
 

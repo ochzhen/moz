@@ -1,4 +1,4 @@
-from peewee import prefetch, fn
+from peewee import prefetch
 
 from moz import MOZDocument, Category
 
