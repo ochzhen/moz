@@ -10,6 +10,6 @@ def is_user_admin(user):
 
 
 def get_categories_with_documents():
-    categories = Category.select(Category).order_by(Category.title.asc())
+    categories = Category.select().order_by(Category.title.asc())
     documents = (MOZDocument.select().order_by(MOZDocument.title.asc()))
     return prefetch(categories, documents)
