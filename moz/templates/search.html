@@ -1,5 +1,4 @@
 {% extends 'layout.html' %} {% block body %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <form method="get" action="/search" id="search-form">
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Документ" name="query"/>
@@ -28,25 +27,6 @@
     <style>
         form {
             margin-bottom: 10px;
-        }
-
-        .keyword-title {
-            text-align: center;
-        }
-
-        .keyword {
-            font-weight: bold;
-            font-size: larger;
-            color: dimgrey;
-        }
-
-        .document-title {
-            font-size: 18px;
-        }
-
-        a:hover, a:visited, a:link, a:active {
-            text-decoration: none;
-            color: black;
         }
     </style>
 {% endblock %}

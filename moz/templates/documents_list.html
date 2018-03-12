@@ -2,9 +2,9 @@
     <div class="row marketing" xmlns="http://www.w3.org/1999/html">
         <form method="get" action="/search" id="search-form">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Документ" name="query" />
+                <input type="text" class="form-control" placeholder="Документ" name="query"/>
                 <span class="input-group-btn">
-                  <input class="btn btn-warning" type="submit" value="Пошук"  form="search-form"/>
+                  <input class="btn btn-warning" type="submit" value="Пошук" form="search-form"/>
                 </span>
             </div>
         </form>
@@ -22,7 +22,9 @@
                         <ul class="list-group">
                             {% for d in c.documents %}
                                 <a href="{{ d.get_file_url() }}">
-                                    <li class="list-group-item">{{ d.title }}</li>
+                                    <li class="list-group-item"><i class="fa fa-file-pdf-o"
+                                                                   style="font-size:18px;color:red"> </i>
+                                        <span class="document-title">{{ d.title }}</span></li>
                                 </a>
                             {% endfor %}
                         </ul>
