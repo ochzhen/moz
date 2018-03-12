@@ -1,0 +1,32 @@
+{% extends 'layout.html' %} {% block body %}
+    <form method="get" action="/search" id="search-form">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Документ" name="query"/>
+            <span class="input-group-btn">
+                  <input class="btn btn-warning" type="submit" value="Пошук" form="search-form"/>
+                </span>
+        </div>
+    </form>
+    {% if documents|length > 0 %}
+        <h3 class="keyword-title">Результат пошуку за словом: <span class="keyword">{{ query }}</span></h3>
+        <div class="panel-group" id="accordion">
+            <ul class="list-group">
+                {% for d in documents %}
+                    <a href="{{ d.get_file_url() }}">
+
+                        <li class="list-group-item"><i class="fa fa-file-pdf-o" style="font-size:18px;color:red"> </i>
+                            <span class="document-title">{{ d.title }}</span></li>
+                    </a>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <h3 class="keyword-title">Нажаль за запитом: <span class="keyword">{{ query }}</span>, ні чого не знайдено.
+            Спробуйте інший запит.</h3>
+    {% endif %}
+    <style>
+        form {
+            margin-bottom: 10px;
+        }
+    </style>
+{% endblock %}

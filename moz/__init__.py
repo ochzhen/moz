@@ -1,16 +1,15 @@
 # coding=utf-8
 import datetime
+import os
 
 import flask_admin as admin
-import os
 from flask import Flask, render_template
+from flask_babelex import Babel
 from flask_login import LoginManager
 from peewee import SqliteDatabase, DoesNotExist
 
 from auth.views import auth as auth_module
 from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR, DEBUG
-
-from flask_babelex import Babel
 
 app = Flask(__name__)
 babel = Babel(app)
