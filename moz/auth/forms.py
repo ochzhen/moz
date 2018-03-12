@@ -7,7 +7,7 @@ from wtforms.fields.html5 import EmailField
 
 
 class LoginForm(FlaskForm):
-    email = StringField(
+    email = EmailField(
         'Email',
         validators = [DataRequired(message=u'Обов\'язкове поле')]
     )
