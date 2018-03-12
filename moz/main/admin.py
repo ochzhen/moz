@@ -70,10 +70,11 @@ class MOZDocumentAdmin(ProtectedModelView):
         return instance
 
     def update_model(self, form, model):
+        old_file = model.file
         result = super(MOZDocumentAdmin, self).update_model(form, model)
         if 'file' in request.files:
             f = request.files['file']
-            model.update_file(f)
+            model.update_file(f, old_file)
         return result
 
     def delete_model(self, model):
@@ -81,7 +82,7 @@ class MOZDocumentAdmin(ProtectedModelView):
         result = super(MOZDocumentAdmin, self).delete_model(model)
         if result:
             model.delete_file(file_path)
-
+        return result
 
 class UserAdmin(ProtectedModelView):
     column_default_sort = ['email']
