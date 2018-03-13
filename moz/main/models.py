@@ -60,8 +60,7 @@ class MOZDocument(BaseModel):
         file_obj.save(full_path)
         return self.save()
 
-    def update_file(self, file_obj):
-        old_file = self.file
+    def update_file(self, file_obj, old_file):
         is_saved = self.save_file(file_obj)
         if is_saved and old_file:
             full_path = os.path.join(MEDIA_ROOT, 'moz', old_file)
