@@ -8,62 +8,88 @@
     <form action="{{url_for('auth.register')}}" method="post">
         {{ form.hidden_tag() }}
         <div class="form-group">
-            <label for="email">{{ form.email.label }}</label>
+            {{ form.email.label }}
             {{ form.email(size=64, class="form-control", id="email") }}
-            {% for error in form.email.errors %}
-                <span style="color: red;">{{ error }}</span>
-            {% endfor %}
+            <ul class="error-list">
+                {% for error in form.email.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
         </div>
         <div class="form-group">
-            <label for="password">{{ form.password.label }}</label>
+            {{ form.password.label }}
             {{ form.password(size=32, class="form-control", id="password") }}
-            {% for error in form.password.errors %}
-                <span style="color: red;">{{ error }}</span>
-            {% endfor %}
+            <ul class="error-list">
+                {% for error in form.password.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
         </div>
         <div class="form-group">
-            <label for="confirm_password">{{ form.confirm_password.label }}</label>
+            {{ form.confirm_password.label }}
             {{ form.confirm_password(size=32, class="form-control", id="confirm_password") }}
-            {% for error in form.confirm_password.errors %}
-                <span style="color: red;">{{ error }}</span>
-            {% endfor %}
+            <ul class="error-list">
+                {% for error in form.confirm_password.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
         </div>
         <div class="form-group">
-            <label for="first_name">{{ form.first_name.label }}</label>
+            {{ form.first_name.label }}
             {{ form.first_name(class="form-control", id="first_name") }}
-            {% for error in form.first_name.errors %}
-                <span style="color: red;">{{ error }}</span>
-            {% endfor %}
+            <ul class="error-list">
+                {% for error in form.first_name.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
         </div>
         <div class="form-group">
-            <label for="last_name">{{ form.last_name.label }}</label>
+            {{ form.last_name.label }}
             {{ form.last_name(class="form-control", id="last_name") }}
-            {% for error in form.last_name.errors %}
-                <span style="color: red;">{{ error }}</span>
-            {% endfor %}
+            <ul class="error-list">
+                {% for error in form.last_name.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
         </div>
         <div class="form-group">
-            <label for="education">{{ form.education.label }}</label>
-            {{ form.education(class="form-control", id="education") }}
-            {% for error in form.education.errors %}
-            <span style="color: red;">{{ error }}</span>
-            {% endfor %}
+            {{ form.speciality.label }}
+            {{ form.speciality(class="form-control", id="speciality") }}
+            <ul class="error-list">
+                {% for error in form.speciality.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
         </div>
         <div class="form-group">
-            <label for="education">{{ form.occupation.label }}</label>
-            {{ form.occupation(class="form-control", id="education") }}
-            {% for error in form.occupation.errors %}
-            <span style="color: red;">{{ error }}</span>
+            {{ form.occupation.label }}
+            {{ form.occupation(class="form-control", id="occupation") }}
+            <ul class="error-list">
+                {% for error in form.occupation.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="checkbox">
+            <label for="terms">
+                {{ form.terms(id="terms") }} {{ form.terms.label.text }}
+            </label>
+        </div>
+        <ul class="error-list">
+            {% for error in form.terms.errors %}
+                <li>{{ error }}</li>
             {% endfor %}
-        </div>
+        </ul>
         <div class="checkbox">
-            {{ form.terms.label }}{{ form.terms }}
-{#            <label><input type="checkbox" id="checkbox1"> I agree with terms of use</label>#}
+            <label for="is_medical">
+                {{ form.is_medical(id="is_medical") }} {{ form.is_medical.label.text }}
+            </label>
         </div>
-        <div class="checkbox">
-            {{ form.is_medical.label }}{{ form.is_medical }}
-{#            <label><input type="checkbox" id="checkbox2"> I confirm that I'm medical worker</label>#}
-        </div>
+        <ul class="error-list">
+            {% for error in form.is_medical.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
         {{ form.submit(class="btn btn-default") }}
     </form>
 </div>

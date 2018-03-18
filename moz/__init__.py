@@ -1,15 +1,17 @@
 # coding=utf-8
 import datetime
+import os
 
 import flask_admin as admin
-import os
 from flask import Flask, render_template
+from flask_babelex import Babel
 from flask_login import LoginManager
 from flask_mail import Mail
 from peewee import SqliteDatabase, DoesNotExist
 
-from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR
 from flask_babelex import Babel
+from auth.views import auth as auth_module
+from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR, DEBUG
 
 app = Flask(__name__)
 babel = Babel(app)
@@ -82,14 +84,14 @@ def create_admin_user():
     user.save()
 
 
-from auth.views import auth as auth_module
+from main.views import main as main_module
 
 app.register_blueprint(main_module)
 app.register_blueprint(auth_module)
-
-
-create_tables()
-create_admin_user()
+if DEBUG:
+    create_tables()
+    create_admin_user()
+    
 adm = admin.Admin(app, template_mode='bootstrap3', name='moz', url=ADMIN_PATH,
                   index_view=ProtectedIndex())
 adm.add_view(UserAdmin(User, name=u'Користувачі'))
