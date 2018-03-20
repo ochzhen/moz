@@ -1,38 +1,97 @@
-{% extends 'layout.html' %}
-
-{% block title %}Головна{% endblock %}
-
-{% block body %}
+{% extends 'layout.html' %} {% block title %}Головна{% endblock %} {% block body %}
 
 <div class="jumbotron jumbotron-register">
-  <h3>Jumbotron heading</h3>
-  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-  <p><a class="btn btn-lg btn-success" href="{{url_for('auth.login')}}" role="button">Sign up</a></p>
+  <h4>
+    <b>
+      <i>Нові клінічні протоколи</i>
+    </b>
+  </h4>
+  <p>
+    <b>Міністерство охорони здоров'я України</b> підписало угоду з компанією фінського медично-наукового товариства <b>Duodecim Medical
+    Publications Ltd</b>, яка спеціалізується на комплексних рішеннях в сфері доказової медицини.
+  </p>
+  <p>
+    Відтепер близько тисячі міжнародних клінічних протоколів англійською мовою доступні в онлайн-режимі для зареєстрованих
+    користувачів.
+  </p>
+  <p>
+    МОЗ України працює над перекладом доказових клінічних протоколів. В першу чергу будуть перекладені та опубліковані протоколи
+    (Топ 100) з найбільш актуальних захворювань і станів, що зустрічаються на первинній ланці.
+  </p>
+
+  {% if not current_user.is_authenticated %}
+    <p>
+      <a class="btn btn-md btn-success" href="{{url_for('auth.register')}}" role="button">Зареєструватись</a>
+    </p>
+  {% endif %}
 </div>
 
-<div class="well">
-    <h3>Subheading</h3>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-</div>
+<div class="well page-content">
+  <h4 class="large-header">Міжнародні протоколи лікування: переваги для пацієнтів, системи охорони здоров'я та держави</h4>
+  <br />
 
-<div class="row marketing">
-  <!-- <div class="col-lg-6">
-    <h4>Subheading</h4>
-    <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
+  <p>
+    <strong><em>28 квітня 2017 набув чинності Наказ МОЗ України № 1422 від 29 грудня 2016 р., який дозволяє українським лікарям використовувати
+      у своїй роботі міжнародні клінічні протоколи.</em></strong>
+  </p>
+  <p>
+    Використання у лікарській практиці нових клінічних протоколів - один із найважливіших шляхів впровадження доказової медицини
+    в Україні. Доказові клінічні протоколи відіграють провідну роль в системі охорони здоров'я, оскільки несуть значні вигоди
+    для усіх “гравців”: пацієнтів, лікарів, та держави в цілому.
+  </p>
+  <br />
 
-    <h4>Subheading</h4>
-    <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
+  <h5 class="small-header">Переваги для пацієнтів</h5>
+  <p>
+    Міжнародні протоколи лікування орієнтовані на потреби пацієнта, тому їх впровадження сприятиме покращенню їх стану здоров'я.
+    Чому ж можна сподіватися на такий позитивний результат? Так, протоколи передбачають використання тих методів діагностики
+    та лікування, які є ефективними та заснованими на доказовій медицині, тоді як призначення неефективного лікування практично
+    унеможливлюється. Відповідно, це призводить до зниження рівня захворюваності і смертності та поліпшення якості життя.
+    Протоколи гарантують, що кожен пацієнт отримає однаково високий рівень надання медичної допомоги, незалежно від того,
+    у якій лікарні, і який лікар їм цю допомогу надаватиме.
+  </p>
+  <br />
 
-    <h4>Subheading</h4>
-    <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-  </div> -->
+  <h5 class="small-header">Переваги для фахівців в галузі охорони здоров'я</h5>
+  <p>
+    Протоколи лікування пропонують чіткі рекомендації для практикуючих лікарів, а також підвищують якість клінічних рішень, у
+    тому числі й серед тих фахівців, які звикли до застарілої медичної практики. Ще одна важлива перевага клінічних протоколів
+    полягає у тому, що вони сприяють узгодженості надання медичної допомоги пацієнтам на усіх рівнях.
+  </p>
+  <br />
+
+  <h5 class="small-header">Переваги для системи охорони здоров'я та держави</h5>
+  <p>
+    Для системи охорони здоров'я важливість впровадження клінічних протоколів пов'язана з підвищенням ефективності роботи (часто
+    за рахунок стандартизації надання медичної допомоги пацієнтам) та оптимізації вартості лікування. Впровадження протоколів
+    також може сприяти підняттю рівня довіри до системи охорони здоров'я зокрема та держави в цілому, оскільки забезпечення
+    якісними та ефективними медичними послугами формують у суспільстві позитивне сприйняття як самої системи, що надає послуги,
+    так і держави, яка їх гарантує.
+  </p>
 </div>
 
 <style>
-    .jumbotron-register {
-        padding-top: 20px;
-        padding-bottom: 20px;
-    }
+  .jumbotron-register {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .jumbotron-register p {
+    font-size: 15px;
+  }
+
+  .page-content p {
+    font-size: 15px;
+  }
+
+  .large-header {
+    font-weight: bold;
+  }
+
+  .small-header {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
 </style>
 
 {% endblock %}
