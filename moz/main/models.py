@@ -2,6 +2,7 @@
 import datetime
 import os
 
+import errno
 from peewee import Model, TextField, DateTimeField, CharField, AutoField, ForeignKeyField
 from werkzeug.utils import secure_filename
 
@@ -55,6 +56,15 @@ class MOZDocument(BaseModel):
         pass
 
     def save_file(self, file_obj):
+        if not os.path.exists(os.path.join(MEDIA_ROOT, 'moz')):
+            path = os.path.join(MEDIA_ROOT, 'moz')
+            try:
+                os.makedirs(path, 0770)
+            except OSError as exc:
+                if exc.errno == errno.EEXIST and os.path.isdir(path):
+                    pass
+                else:
+                    raise
         self.file = secure_filename(file_obj.filename)
         full_path = os.path.join(MEDIA_ROOT, 'moz', self.file)
         file_obj.save(full_path)
