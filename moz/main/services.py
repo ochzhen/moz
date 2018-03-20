@@ -17,6 +17,7 @@ def get_categories_with_documents():
 
 def get_documents_for_query(query):
     if type(query) == str or type(query) == unicode:
+        query = u'%%%s%%' % query
         documents = MOZDocument.select().where(MOZDocument.title.contains(query)).order_by(MOZDocument.title.asc())
         if not documents or len(documents) == 0:
             return []
