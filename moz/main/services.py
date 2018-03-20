@@ -4,9 +4,7 @@ from moz import MOZDocument, Category
 
 
 def is_user_admin(user):
-    if user and user.is_authenticated and user.is_admin:
-        return True
-    return False
+    return user and user.is_authenticated and user.is_admin
 
 
 def get_categories_with_documents():

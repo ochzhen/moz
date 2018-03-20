@@ -18,6 +18,7 @@ app.config.from_object('config')
 login = LoginManager()
 login.init_app(app)
 login.login_view = 'auth.login'
+login.login_message = u'Будь ласка, увійдіть у систему.'
 
 
 @babel.localeselector
