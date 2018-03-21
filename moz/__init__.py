@@ -6,8 +6,10 @@ import flask_admin as admin
 from flask import Flask, render_template
 from flask_babelex import Babel
 from flask_login import LoginManager
+from flask_mail import Mail
 from peewee import SqliteDatabase, DoesNotExist
 
+from flask_babelex import Babel
 from auth.views import auth as auth_module
 from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR, DEBUG
 
@@ -19,6 +21,8 @@ login = LoginManager()
 login.init_app(app)
 login.login_view = 'auth.login'
 login.login_message = u'Будь ласка, увійдіть у систему.'
+
+mail = Mail(app)
 
 
 @babel.localeselector
@@ -51,6 +55,9 @@ from main.admin import MOZDocumentAdmin, CategoryAdmin, ProtectedIndex, UserAdmi
 #     port=int(app.config['DB_PORT'])
 # )
 
+
+from moz.auth.models import User
+from main.views import main as main_module
 
 def create_tables():
     with db:
@@ -85,6 +92,7 @@ app.register_blueprint(auth_module)
 if DEBUG:
     create_tables()
     create_admin_user()
+    
 adm = admin.Admin(app, template_mode='bootstrap3', name='moz', url=ADMIN_PATH,
                   index_view=ProtectedIndex())
 adm.add_view(UserAdmin(User, name=u'Користувачі'))

@@ -1,5 +1,7 @@
 import os
 
+import datetime
+
 DEBUG = True
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 SECRET_KEY = os.environ.get('MOZ_SECRET_KEY', 'SUPER_SECRET_KEY')
@@ -14,3 +16,18 @@ ADMIN_PATH = '/admin'
 DEFAULT_ADMIN_USER = os.environ.get('ADMIN_USER', 'admin@admin.com')
 DEFAULT_ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin')
 MIN_PASSWORD_LENGTH = 8
+
+SECURITY_PASSWORD_SALT = datetime.datetime.now()
+
+# mail settings
+MAIL_SERVER = 'smtp.googlemail.com'
+MAIL_PORT = 465
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+
+# gmail authentication
+MAIL_USERNAME = os.environ['APP_MAIL_USERNAME']
+MAIL_PASSWORD = os.environ['APP_MAIL_PASSWORD']
+
+# mail accounts
+MAIL_DEFAULT_SENDER = 'moz.noreply@gmail.com'

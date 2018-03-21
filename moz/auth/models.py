@@ -1,4 +1,8 @@
 # coding=utf-8
+from datetime import datetime
+from peewee import Model, TextField, BooleanField, DateTimeField
+from werkzeug.security import generate_password_hash, check_password_hash
+
 from flask_login import UserMixin
 from peewee import Model, BooleanField, DateTimeField, CharField, AutoField
 from peewee import datetime

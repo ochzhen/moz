@@ -1,8 +1,12 @@
 # coding: utf-8
-import datetime
+from datetime import datetime
 from flask import render_template, Blueprint, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
+from flask_security.confirmable import generate_confirmation_token
+
+from moz.auth.email import send_email
 from moz.auth.forms import LoginForm, RegisterForm
+from moz.auth.token import confirm_token
 
 auth = Blueprint('auth', __name__, template_folder='templates')
 
@@ -49,6 +53,42 @@ def register():
         )
         user.set_password(form.password.data)
         user.save()
+        token = generate_confirmation_token(user.email)
+        confirm_url = url_for('user.confirm_email', token=token, _external=True)
+        html = render_template('confirm.html', confirm_url=confirm_url)
+        subject = "Please confirm your email"
+        send_email(user.email, subject, html)
+
+        login_user(user)
+
+        flash('A confirmation email has been sent via email.', 'success')
         flash(u'Вітаємо, тепер Ви зареєстрований користувач!')
-        return redirect(url_for('auth.login'))
-    return render_template('register.html', form=form)
+        # return redirect(url_for('auth.login'))
+        return redirect(url_for("main.index"))
+    return render_template('register.html', title='Register', form=form)
+
+
+@auth.route('/confirm/<token>')
+@login_required
+def confirm_email(token):
+    try:
+        email = confirm_token(token)
+    except:
+        flash('The confirmation link is invalid or has expired.', 'danger')
+    from moz.auth.models import User
+    user = User.select().where((User.email == email)).first_or_404()
+    if user.confirmed:
+        flash('Account already confirmed. Please login.', 'success')
+    else:
+        user.confirmed = True
+        user.confirmed_on = datetime.now()
+        user.save()
+        flash('You have confirmed your account. Thanks!', 'success')
+    return redirect(url_for('main.index'))
+
+
+@auth.route('/unconfirmed')
+@login_required
+def unconfirmed():
+    flash('Please confirm your account!', 'warning')
+    return render_template('unconfirmed.html')

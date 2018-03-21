@@ -3,6 +3,7 @@ import os
 from flask import render_template, Blueprint, current_app, send_from_directory, request, abort
 from flask_login import login_required
 
+from moz.auth.email import confirmed_email
 from moz import app
 from services import get_categories_with_documents, get_documents_for_query
 
@@ -16,6 +17,7 @@ def index():
 
 @main.route('/documents')
 @login_required
+@confirmed_email
 def documents_list():
     categories_with_documents = get_categories_with_documents()
     current_app.logger.info("Found categories with documents %s for template documents_list.html",
