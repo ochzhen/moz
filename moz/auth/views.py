@@ -19,7 +19,7 @@ def login():
         from moz.auth.models import User
         user = User.select().where((User.email == form.email.data)).first()
         if user is None or not user.check_password(form.password.data):
-            flash(u'Невірний email або пароль')
+            flash(u'Невірний email або пароль', category='error')
             return render_template('login.html', form=form)
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('main.index'))
