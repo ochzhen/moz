@@ -6,6 +6,7 @@ import flask_admin as admin
 from flask import Flask, render_template
 from flask_babelex import Babel
 from flask_login import LoginManager
+from flask_mail import Mail
 from peewee import SqliteDatabase, DoesNotExist
 
 from auth.views import auth as auth_module
@@ -19,6 +20,8 @@ login = LoginManager()
 login.init_app(app)
 login.login_view = 'auth.login'
 login.login_message = u'Будь ласка, увійдіть у систему.'
+
+mail = Mail(app)
 
 
 @babel.localeselector
