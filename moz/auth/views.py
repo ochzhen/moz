@@ -55,13 +55,13 @@ def register():
         token = generate_confirmation_token(user.email)
         confirm_url = url_for('auth.confirm_email', token=token, _external=True)
         html = render_template('activate.html', confirm_url=confirm_url)
-        subject = "Please confirm your email"
+        subject = u'Будь ласка, підтвердьте свою електронну пошту'
         send_email(user.email, subject, html)
 
         login_user(user)
 
         flash(u'Вітаємо, тепер Ви зареєстрований користувач! Підтвердіть будь ласка свій email')
-        return redirect(url_for("main.index"))
+        return redirect(url_for("auth.unconfirmed"))
     return render_template('register.html', form=form)
 
 
@@ -71,13 +71,34 @@ def confirm_email(token):
     try:
         email = confirm_token(token)
     except:
-        flash('The confirmation link is invalid or has expired.', 'danger')
+        flash(u'Посилання для підтвердження недійсний або простроченo.', 'danger')
     from moz.auth.models import User
     user = User.select().where(User.email==email).get()
     if user.confirmed_at is not None:
-        flash('Account already confirmed. Please login.', 'success')
+        flash(u'Аккаунт вже підтверджено. Будь ласка, увійдіть', 'success')
     else:
         user.confirmed_at = datetime.datetime.now()
         user.save()
-        flash('You have confirmed your account. Thanks!', 'success')
+        flash(u'Ви підтвердили свою пошту. Дякую!', 'success')
     return redirect(url_for('main.index'))
+
+
+@auth.route('/unconfirmed')
+@login_required
+def unconfirmed():
+    if current_user.confirmed_at is not None:
+        return redirect('main.index')
+    flash(u'Будь ласка, підтвердьте свою електронну пошту!', 'warning')
+    return render_template('unconfirmed.html')
+
+
+@auth.route('/resend')
+@login_required
+def resend_confirmation():
+    token = generate_confirmation_token(current_user.email)
+    confirm_url = url_for('auth.confirm_email', token=token, _external=True)
+    html = render_template('activate.html', confirm_url=confirm_url)
+    subject = u'Будь ласка, підтвердьте свою електронну пошту'
+    send_email(current_user.email, subject, html)
+    flash(u'Було надіслано нове електронне підтвердження.', 'success')
+    return redirect(url_for('auth.unconfirmed'))

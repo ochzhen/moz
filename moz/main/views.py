@@ -4,6 +4,7 @@ from flask import render_template, Blueprint, current_app, send_from_directory, 
 from flask_login import login_required
 
 from moz import app
+from moz.auth.email import check_confirmed
 from services import get_categories_with_documents, get_documents_for_query
 
 main = Blueprint('main', __name__, template_folder='templates')
@@ -16,6 +17,7 @@ def index():
 
 @main.route('/documents')
 @login_required
+@check_confirmed
 def documents_list():
     categories_with_documents = get_categories_with_documents()
     current_app.logger.info("Found categories with documents %s for template documents_list.html",
@@ -25,6 +27,7 @@ def documents_list():
 
 @main.route('/documents/<int:id>')
 @login_required
+@check_confirmed
 def view_document(id):
     return render_template('document.html')
 
@@ -39,6 +42,7 @@ def get_moz_document(filename):
 
 @main.route('/search')
 @login_required
+@check_confirmed
 def search():
     query = request.args.get('query')
     query = query if query else ""
