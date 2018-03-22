@@ -78,3 +78,7 @@ def sitemap():
     except Exception as e:
         return str(e)
 
+
+@app.route('/robots.txt')
+def static_from_root():
+ return send_from_directory(app.static_folder, request.path[1:])

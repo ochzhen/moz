@@ -12,7 +12,7 @@ from peewee import SqliteDatabase, DoesNotExist
 from auth.views import auth as auth_module
 from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR, DEBUG
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 babel = Babel(app)
 app.config.from_object('config')
 
