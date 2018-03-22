@@ -16,6 +16,8 @@ DEFAULT_ADMIN_USER = os.environ.get('ADMIN_USER', 'admin@admin.com')
 DEFAULT_ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin')
 MIN_PASSWORD_LENGTH = 8
 
+PROTOCOL = 'http://'
+DOMAIN = 'localhost:5000'
 
 # mail settings
 MAIL_SERVER = 'smtp.googlemail.com'
