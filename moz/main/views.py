@@ -1,8 +1,10 @@
 import os
 
-from flask import render_template, Blueprint, current_app, send_from_directory, request, abort
+from datetime import datetime, timedelta
+from flask import render_template, Blueprint, current_app, send_from_directory, request, abort, make_response
 from flask_login import login_required
 
+from config import PROTOCOL, DOMAIN
 from moz import app
 from moz.auth.email import check_confirmed
 from services import get_categories_with_documents, get_documents_for_query
@@ -55,3 +57,28 @@ def search():
 @main.errorhandler(404)
 def not_found(error):
     return render_template('404.html')
+
+
+@main.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    try:
+        pages = []
+        ten_days_ago = (datetime.now() - timedelta(days=7)).date().isoformat()
+        for rule in app.url_map.iter_rules():
+            if "GET" in rule.methods and len(rule.arguments) == 0 and 'admin' not in rule.rule:
+                pages.append(
+                    [PROTOCOL + DOMAIN + str(rule.rule), ten_days_ago]
+                )
+
+        sitemap_xml = render_template('sitemap_template.xml', pages=pages)
+        response = make_response(sitemap_xml)
+        response.headers["Content-Type"] = "application/xml"
+
+        return response
+    except Exception as e:
+        return str(e)
+
+
+@app.route('/robots.txt')
+def static_from_root():
+ return send_from_directory(app.static_folder, request.path[1:])
