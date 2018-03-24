@@ -60,7 +60,7 @@ def register():
 
         login_user(user)
 
-        flash(u'Вітаємо, тепер Ви зареєстрований користувач!', category='info')
+        flash(u'Вітаємо, тепер Ви зареєстрований користувач! Підтвердіть будь ласка свій email', category='info')
         return redirect(url_for("auth.unconfirmed"))
     return render_template('register.html', form=form)
 
