@@ -19,7 +19,7 @@ def send_email(to, subject, template):
 def check_confirmed(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
-        if current_user.confirmed_at is None:
+        if not current_user.active:
             return redirect(url_for('auth.unconfirmed'))
         return func(*args, **kwargs)
 

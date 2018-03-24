@@ -35,7 +35,7 @@ class RegisterForm(FlaskForm):
             Length(min=8, message=u'Пароль має бути довжиною не менше 8 символів'),
             Regexp(
                 regex=r'[A-Za-z0-9@#$%^&+=]+',
-                message=u'Пароль має складається з латинських літер [a-z, A-Z], цифр [0-9] та символів [@, #, $, %, ^, =, &, +]'
+                message=u'Пароль має складатися з латинських літер [a-z, A-Z], цифр [0-9] та символів [@, #, $, %, ^, =, &, +]'
             )
         ]
     )
@@ -89,3 +89,37 @@ class RegisterForm(FlaskForm):
         user = User.select().where((User.email == email.data)).first()
         if user is not None:
             raise ValidationError(u'Будь ласка, використайте іншу почтову адресу.')
+
+
+class ForgotPasswordForm(FlaskForm):
+    email = EmailField(
+        'Email',
+        validators=[
+            DataRequired(message=u'Обов\'язкове поле'),
+            Email(),
+            Length(max=100, message=u'Email має бути довжиною не більше 100 символів')
+        ]
+    )
+    submit = SubmitField(u'Відправити')
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField(
+        u'Пароль',
+        validators=[
+            DataRequired(message=u'Обов\'язкове поле'),
+            Length(min=8, message=u'Пароль має бути довжиною не менше 8 символів'),
+            Regexp(
+                regex=r'[A-Za-z0-9@#$%^&+=]+',
+                message=u'Пароль має складатися з латинських літер [a-z, A-Z], цифр [0-9] та символів [@, #, $, %, ^, =, &, +]'
+            )
+        ]
+    )
+    confirm_password = PasswordField(
+        u'Підтвердіть пароль',
+        validators=[
+            DataRequired(message=u'Обов\'язкове поле'),
+            EqualTo('password', message=u'Паролі не співпадають')
+        ]
+    )
+    submit = SubmitField(u'Відновити')

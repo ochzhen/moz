@@ -26,7 +26,7 @@ class User(UserMixin, BaseModel):
     active = BooleanField(null=False, default=False, verbose_name=u'Користувач пітверджений')
     is_admin = BooleanField(null=False, default=False, verbose_name=u'Аккаунт адміністратора',
                             help_text=u'Відмітьте це поле якщо бажаєте створити нового адміністратора')
-    registered_at = DateTimeField(default=datetime.datetime.now, verbose_name=u'Дата і час регістрації')
+    registered_at = DateTimeField(default=datetime.datetime.now, verbose_name=u'Дата і час реєстрації')
     confirmed_at = DateTimeField(null=True, verbose_name=u'Дата і час пітведження')
 
     def set_password(self, password):

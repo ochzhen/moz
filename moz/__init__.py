@@ -20,6 +20,7 @@ login = LoginManager()
 login.init_app(app)
 login.login_view = 'auth.login'
 login.login_message = u'Будь ласка, увійдіть у систему.'
+login.login_message_category = 'info'
 
 mail = Mail(app)
 

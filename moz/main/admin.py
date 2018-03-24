@@ -105,7 +105,7 @@ class UserAdmin(ProtectedModelView):
             u'Мінімальна довжина має бути не менеше %d символів. ' \
             u'Пароль не має складатися лише з одного символа що повторюєтся. ' \
             u'Пароль не має містити в собі лише цифри.' % MIN_PASSWORD_LENGTH
-        flash(m, category='error')
+        flash(m, 'danger')
         return False
 
     def create_model(self, form):

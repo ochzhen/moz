@@ -4,30 +4,30 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}{% endblock %}</title>
-    <link rel="icon" href="static/moz_favicon.png">
+    <title>{% block title %}Міністерство Охорони Здоров'я України{% endblock %}</title>
+    <link rel="icon" href="/static/moz_favicon.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link href="static/styles.css" rel="stylesheet">
+    <link href="/static/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <div class="container">
     {% include 'includes/_header.html' %}
 
-    {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
+            {% for category, message in messages %}
+                <div class="alert alert-{{category}}">
+                    {{ message }}
+                </div>
+            {% endfor %}
         {% endif %}
     {% endwith %}
 
     {% block body %} {% endblock %}
 
     <footer class="footer">
-        <p>&copy; 2018 Company, Inc.</p>
+        <p>&copy; Міністерство Охорони Здоров'я України</p>
     </footer>
 </div>
 
