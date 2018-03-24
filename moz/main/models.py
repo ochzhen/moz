@@ -45,15 +45,11 @@ class MOZDocument(BaseModel):
 
     category = ForeignKeyField(model=Category,
                                backref='documents',
-
                                null=False,
                                verbose_name=u'Категорія документа')
 
     def get_url(self):
         return u"/documents/%s" % self.id
-
-    def file_url(self, file_obj):
-        pass
 
     def save_file(self, file_obj):
         if not os.path.exists(os.path.join(MEDIA_ROOT, 'moz')):
@@ -65,7 +61,8 @@ class MOZDocument(BaseModel):
                     pass
                 else:
                     raise
-        self.file = secure_filename(file_obj.filename)
+        name, extension = os.path.splitext(file_obj.filename)
+        self.file = secure_filename(name + datetime.datetime.now().isoformat() + extension)
         full_path = os.path.join(MEDIA_ROOT, 'moz', self.file)
         file_obj.save(full_path)
         return self.save()
