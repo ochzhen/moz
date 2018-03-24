@@ -6,10 +6,10 @@ from flask_admin.contrib.peewee import ModelView
 from wtforms.fields import FileField, PasswordField
 from wtforms.fields.html5 import EmailField
 
+from config import MIN_PASSWORD_LENGTH
 from models import MOZDocument, Category
 from moz import User
 from services import is_user_admin
-from config import MIN_PASSWORD_LENGTH
 
 
 class ProtectedIndex(AdminIndexView):
@@ -54,11 +54,6 @@ class MOZDocumentAdmin(ProtectedModelView):
                          file=MOZDocument.file.verbose_name,
                          category=MOZDocument.category.verbose_name)
     can_view_details = True
-    form_ajax_refs = {
-        'category': {
-            'fields': (Category.title, 'title')
-        }
-    }
 
     form_overrides = dict(file=FileField)
 
@@ -83,6 +78,7 @@ class MOZDocumentAdmin(ProtectedModelView):
         if result:
             model.delete_file(file_path)
         return result
+
 
 class UserAdmin(ProtectedModelView):
     column_default_sort = ['email']
