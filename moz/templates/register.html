@@ -6,6 +6,7 @@
 
 <div class="well">
     <form action="{{url_for('auth.register')}}" method="post">
+        {{ form.csrf_token }}
         {{ form.hidden_tag() }}
         <div class="form-group">
             {{ form.email.label }}
