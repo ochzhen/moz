@@ -8,6 +8,7 @@ from flask_babelex import Babel
 from flask_login import LoginManager
 from flask_mail import Mail
 from peewee import SqliteDatabase, DoesNotExist
+from flask_wtf.csrf import CSRFProtect
 
 from auth.views import auth as auth_module
 from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR, DEBUG
@@ -17,6 +18,7 @@ babel = Babel(app)
 app.config.from_object('config')
 
 login = LoginManager()
+login.session_protection = 'strong'
 login.init_app(app)
 login.login_view = 'auth.login'
 login.login_message = u'Будь ласка, увійдіть у систему.'
@@ -38,6 +40,19 @@ def load_user(user_id):
 @app.errorhandler(404)
 def not_found(error):
     return render_template('404.html')
+
+
+@app.after_request
+def apply_caching(response):
+    response.headers["X-Frame-Options"] = "deny"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Permitted-Cross-Domain-Policies"] = "none"
+    response.headers["Referrer-Policy"] = "origin"
+    #  Uncomment if we will use HTTPS
+    # response.headers["Strict-Transport-Security"] = "max-age=31536000 ; includeSubDomains"
+    # response.headers["Public-Key-Pins"] = "pin-sha256=\"mypubkey\" max-age=10000; includeSubDomains"
+    return response
 
 
 db = SqliteDatabase(os.path.join(BASE_DIR, 'moz.db'))
@@ -94,3 +109,4 @@ adm = admin.Admin(app, template_mode='bootstrap3', name='moz', url=ADMIN_PATH,
 adm.add_view(UserAdmin(User, name=u'Користувачі'))
 adm.add_view(CategoryAdmin(Category, name=u'Категорії'))
 adm.add_view(MOZDocumentAdmin(MOZDocument, name=u'Документи МОЗ'))
+csrf = CSRFProtect(app)
