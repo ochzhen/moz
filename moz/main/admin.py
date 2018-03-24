@@ -3,13 +3,13 @@ import flask_login
 from flask import request, abort, flash
 from flask_admin import AdminIndexView, expose
 from flask_admin.contrib.peewee import ModelView
-from wtforms.fields import FileField, PasswordField, SelectField
+from wtforms.fields import FileField, PasswordField
 from wtforms.fields.html5 import EmailField
 
+from config import MIN_PASSWORD_LENGTH
 from models import MOZDocument, Category
 from moz import User
 from services import is_user_admin
-from config import MIN_PASSWORD_LENGTH
 
 
 class ProtectedIndex(AdminIndexView):
