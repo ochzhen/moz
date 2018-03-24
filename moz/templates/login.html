@@ -33,16 +33,15 @@
         </div>
         {{ form.submit(class="btn btn-default") }}
     </form>
-    <div class="register-new">Новий користувач?  <a href="{{ url_for('auth.register') }}">Зареєструватись</a></div>
+    <div class="links-block clearfix">
+        <a href="{{ url_for('auth.forgot_password') }}" class="pull-left">Забули пароль?</a>
+        <a href="{{ url_for('auth.register') }}" class="pull-right">Зареєструватись</a>
+    </div>
 </div>
 
 <style>
-    .register-new {
+    .links-block {
         margin-top: 15px;
-    }
-
-    .register-new a:hover {
-        text-decoration: underline;
     }
 </style>
 

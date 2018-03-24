@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="alert alert-success">
+    <h5>На Вашу електронну адресу було надіслано лист з посиланням для відновлення паролю.</h5>
+    <p>Не отримали електронного листа? <a href="{{ url_for('auth.forgot_password') }}" class="link"> Спробувати ще раз</a>.</p>
+</div>
+
+{% endblock %}

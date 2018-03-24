@@ -4,8 +4,8 @@ from flask import render_template, Blueprint, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 
 from moz.auth.email import send_email
-from moz.auth.forms import LoginForm, RegisterForm
-from moz.auth.token import confirm_token, generate_confirmation_token
+from moz.auth.forms import LoginForm, RegisterForm, ForgotPasswordForm, ResetPasswordForm
+from moz.auth.token import confirm_token, generate_token
 
 auth = Blueprint('auth', __name__, template_folder='templates')
 
@@ -17,9 +17,9 @@ def login():
     form = LoginForm(request.form)
     if form.validate_on_submit():
         from moz.auth.models import User
-        user = User.select().where((User.email == form.email.data)).first()
+        user = User.select().where(User.email == form.email.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash(u'Невірний email або пароль', category='error')
+            flash(u'Невірний email або пароль', 'danger')
             return render_template('login.html', form=form)
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('main.index'))
@@ -52,15 +52,16 @@ def register():
         )
         user.set_password(form.password.data)
         user.save()
-        token = generate_confirmation_token(user.email)
+
+        token = generate_token(user.email)
         confirm_url = url_for('auth.confirm_email', token=token, _external=True)
-        html = render_template('activate.html', confirm_url=confirm_url)
+        html = render_template('email/activate.html', confirm_url=confirm_url)
         subject = u'Будь ласка, підтвердьте свою електронну пошту'
         send_email(user.email, subject, html)
 
         login_user(user)
 
-        flash(u'Вітаємо, тепер Ви зареєстрований користувач! Підтвердіть будь ласка свій email', category='info')
+        flash(u'Вітаємо, тепер Ви зареєстрований користувач! Підтвердіть будь ласка свій email.', 'info')
         return redirect(url_for("auth.unconfirmed"))
     return render_template('register.html', form=form)
 
@@ -71,34 +72,91 @@ def confirm_email(token):
     try:
         email = confirm_token(token)
     except:
-        flash(u'Посилання для підтвердження недійсний або простроченo.', 'danger')
+        return redirect(url_for('auth.invalid_link'))
     from moz.auth.models import User
-    user = User.select().where(User.email==email).get()
-    if user.confirmed_at is not None:
-        flash(u'Аккаунт вже підтверджено. Будь ласка, увійдіть', 'success')
+    user = User.select().where(User.email==email).first()
+
+    if user.email != current_user.email:
+        return redirect(url_for('auth.invalid_link'))
+
+    if user.active:
+        flash(u'Аккаунт вже підтверджено.', 'success')
     else:
         user.confirmed_at = datetime.datetime.now()
+        user.active = True
         user.save()
-        flash(u'Ви підтвердили свою пошту. Дякую!', 'success')
+        flash(u'Ви підтвердили свою електронну адресу. Дякуємо!', 'success')
     return redirect(url_for('main.index'))
 
 
 @auth.route('/unconfirmed')
 @login_required
 def unconfirmed():
-    if current_user.confirmed_at is not None:
+    if current_user.active:
         return redirect('main.index')
-    flash(u'Будь ласка, підтвердьте свою електронну пошту!', 'warning')
     return render_template('unconfirmed.html')
 
 
 @auth.route('/resend')
 @login_required
 def resend_confirmation():
-    token = generate_confirmation_token(current_user.email)
+    token = generate_token(current_user.email)
     confirm_url = url_for('auth.confirm_email', token=token, _external=True)
-    html = render_template('activate.html', confirm_url=confirm_url)
-    subject = u'Будь ласка, підтвердьте свою електронну пошту'
+    html = render_template('email/activate.html', confirm_url=confirm_url)
+    subject = u'Підтвердження електронної адреси'
     send_email(current_user.email, subject, html)
     flash(u'Було надіслано нове електронне підтвердження.', 'success')
     return redirect(url_for('auth.unconfirmed'))
+
+
+@auth.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    form = ForgotPasswordForm(request.form)
+    if form.validate_on_submit():
+        from moz.auth.models import User
+        user = User.select().where(User.email == form.email.data).first()
+        if user is None:
+            form.email.errors.append(u'Користувача з вказаним email не існує.')
+            return render_template('forgot_password.html', form=form)
+        
+        token = generate_token(user.email)
+        reset_password_url = url_for('auth.reset_password', token=token, _external=True)
+        body = render_template('email/reset_password.html', reset_password_url=reset_password_url)
+        subject = u'Відновлення паролю'
+        send_email(user.email, subject, body)
+
+        return render_template('reset_link_sent.html')
+
+    return render_template('forgot_password.html', form=form)
+
+
+@auth.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    try:
+        email = confirm_token(token)
+    except:
+        return redirect(url_for('auth.invalid_link'))
+
+    form = ResetPasswordForm(request.form)
+
+    if form.validate_on_submit():
+        from moz.auth.models import User
+        user = User.select().where(User.email == email).first()
+        if user is None:
+            return redirect(url_for('auth.invalid_link'))
+        user.set_password(form.password.data)
+        user.save()
+
+        flash(u'Ваш пароль було змінено. Тепер Ви можете увійти у систему.', 'success')
+        if current_user.is_authenticated:
+            logout_user()
+        return redirect(url_for('auth.login'))
+    
+    flash(u'Введіть свій новий пароль.', 'info')
+    return render_template('reset_password.html', form=form)
+
+
+@auth.route('/invalid-link')
+def invalid_link():
+    flash(u'Посилання недійсне або простроченo.', 'danger')
+    return render_template('blank.html')

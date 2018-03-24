@@ -54,11 +54,6 @@ def search():
     return render_template('search.html', query=query, documents=documents)
 
 
-@main.errorhandler(404)
-def not_found(error):
-    return render_template('404.html')
-
-
 @main.route('/sitemap.xml', methods=['GET'])
 def sitemap():
     try:
