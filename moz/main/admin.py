@@ -18,7 +18,7 @@ class ProtectedIndex(AdminIndexView):
         return is_user_admin(flask_login.current_user)
 
     def inaccessible_callback(self, name, **kwargs):
-        abort(403)
+        abort(404)
 
     @expose()
     def index(self):
@@ -31,7 +31,7 @@ class ProtectedModelView(ModelView):
         return is_user_admin(flask_login.current_user)
 
     def inaccessible_callback(self, name, **kwargs):
-        abort(403)
+        abort(404)
 
 
 class CategoryAdmin(ProtectedModelView):

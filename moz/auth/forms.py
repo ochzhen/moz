@@ -79,7 +79,7 @@ class RegisterForm(FlaskForm):
         validators=[DataRequired(message=u'Обов\'язкове поле')]
     )
     is_medical = BooleanField(
-        u'Я підтверджую, що я медичний співробітник.',
+        u'Я підтверджую, що я медичний працівник.',
         validators=[DataRequired(message=u'Обов\'язкове поле')]
     )
     submit = SubmitField(u'Зареєструвати')
@@ -88,7 +88,7 @@ class RegisterForm(FlaskForm):
         from moz.auth.models import User
         user = User.select().where((User.email == email.data)).first()
         if user is not None:
-            raise ValidationError(u'Будь ласка, використайте іншу почтову адресу.')
+            raise ValidationError(u'Користувач з вказаною адресою вже зареєстрований. Використайте іншу електронну адресу.')
 
 
 class ForgotPasswordForm(FlaskForm):

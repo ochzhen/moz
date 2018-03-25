@@ -21,7 +21,7 @@
                     <div id="collapse{{ c.id }}" class="panel-collapse collapse">
                         <ul class="list-group">
                             {% for d in c.documents %}
-                                <a href="{{ d.get_file_url() }}">
+                                <a href="{{ d.get_file_url() }}" target="_blank"
                                     <li class="list-group-item"><i class="fa fa-file-pdf-o"
                                                                    style="font-size:18px;color:red"> </i>
                                         <span class="document-title">{{ d.title }}</span></li>
