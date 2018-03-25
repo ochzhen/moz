@@ -56,7 +56,7 @@ def register():
         token = generate_token(user.email)
         confirm_url = url_for('auth.confirm_email', token=token, _external=True)
         html = render_template('email/activate.html', confirm_url=confirm_url)
-        subject = u'Будь ласка, підтвердьте свою електронну пошту'
+        subject = u'Підтвердження електронної адреси'
         send_email(user.email, subject, html)
 
         login_user(user)
