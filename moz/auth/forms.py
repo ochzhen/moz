@@ -46,20 +46,6 @@ class RegisterForm(FlaskForm):
             EqualTo('password', message=u'Паролі не співпадають')
         ]
     )
-    first_name = StringField(
-        u'Ім\'я',
-        validators=[
-            DataRequired(message=u'Обов\'язкове поле'),
-            Length(max=50, message=u'Поле має бути довжиною не більше 50 символів')
-        ]
-    )
-    last_name = StringField(
-        u'Прізвище',
-        validators=[
-            DataRequired(message=u'Обов\'язкове поле'),
-            Length(max=50, message=u'Поле має бути довжиною не більше 50 символів')
-        ]
-    )
     speciality = StringField(
         u'Спеціальність',
         validators=[
@@ -75,7 +61,6 @@ class RegisterForm(FlaskForm):
         ]
     )
     terms = BooleanField(
-        u'Я погоджуюся з умовами використання.',
         validators=[DataRequired(message=u'Обов\'язкове поле')]
     )
     is_medical = BooleanField(

@@ -45,8 +45,6 @@ def register():
             active=False,
             is_admin=False,
             registered_at=datetime.datetime.now(),
-            first_name=form.first_name.data,
-            last_name=form.last_name.data,
             speciality=form.speciality.data,
             occupation=form.occupation.data
         )

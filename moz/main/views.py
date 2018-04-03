@@ -54,6 +54,10 @@ def search():
     return render_template('search.html', query=query, documents=documents)
 
 
+@main.route('/terms_of_use')
+def terms_of_use():
+    return render_template('terms_of_use.html')
+
 @main.route('/sitemap.xml', methods=['GET'])
 def sitemap():
     try:

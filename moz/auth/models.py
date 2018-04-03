@@ -17,12 +17,10 @@ class User(UserMixin, BaseModel):
     id = AutoField(null=False, index=True, unique=True, primary_key=True)
     email = CharField(unique=True, index=True, null=False, max_length=254, verbose_name=u'Електрона пошта',
                       help_text=u'Це поле є унікальнім')
-    first_name = CharField(max_length=64, null=False, verbose_name=u'Ім\'я')
-    last_name = CharField(max_length=64, null=False, verbose_name=u'Прізвище')
     speciality = CharField(max_length=128, null=False, verbose_name=u'Спеціальність')
     occupation = CharField(max_length=128, null=False, verbose_name=u'Місце роботи')
     password = CharField(null=False, max_length=256, verbose_name=u'Пароль',
-                         help_text=u'Пароль зебрігаєтся у шифрованому виді')
+                         help_text=u'Пароль зберігаєтся у шифрованому виді')
     active = BooleanField(null=False, default=False, verbose_name=u'Користувач пітверджений')
     is_admin = BooleanField(null=False, default=False, verbose_name=u'Аккаунт адміністратора',
                             help_text=u'Відмітьте це поле якщо бажаєте створити нового адміністратора')

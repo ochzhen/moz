@@ -87,8 +87,6 @@ def create_admin_user():
                 active=True,
                 is_admin=True,
                 registered_at=datetime.datetime.now(),
-                first_name='Admin',
-                last_name='Admin',
                 speciality='Admin',
                 occupation='Admin',
                 confirmed_at=datetime.datetime.now()

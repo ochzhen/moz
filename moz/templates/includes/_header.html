@@ -1,29 +1,42 @@
-<div class="header clearfix">
-    <a href="http://moz.gov.ua/" target="_blank" class="moz-icon-link">
-        <img src="/static/MOHLogoUa.png" alt="Міністерство Охорони Здоров'я України" width="150px" />
-    </a>
-    <nav>
+<div class="header">
+    <div class="logos-block">
+        <a href="http://moz.gov.ua/" target="_blank" class="moz-logo-link">
+            <img src="/static/MOHLogoUa.png" alt="Міністерство Охорони Здоров'я України" height="110px" />
+        </a>
+        <a href="https://www.duodecim.fi/english/" target="_blank">
+            <img src="/static/duodecim.png" alt="The Finnish Medical Society Duodecim" height="85px" />
+        </a>
+    </div>
+    <nav class="navigation">
         <ul class="nav nav-pills">
-        <li role="presentation"><a href="{{url_for('main.index')}}">Головна</a></li>
-        <li role="presentation"><a href="{{url_for('main.documents_list')}}">Протоколи</a></li>
-        {% if current_user.is_authenticated %}
-            <li role="presentation"><a href="{{url_for('auth.logout')}}">Вихід</a></li>
-        {% else %}
-            <li role="presentation"><a href="{{url_for('auth.login')}}">Вхід</a></li>
-            <li role="presentation"><a href="{{url_for('auth.register')}}">Реєстрація</a></li>
-        {% endif %}
+            <li role="presentation"><a href="{{url_for('main.index')}}">Головна</a></li>
+            <li role="presentation"><a href="{{url_for('main.documents_list')}}">Протоколи</a></li>
+            {% if current_user.is_authenticated %}
+                <li role="presentation"><a href="{{url_for('auth.logout')}}">Вихід</a></li>
+            {% else %}
+                <li role="presentation"><a href="{{url_for('auth.login')}}">Вхід</a></li>
+                <li role="presentation"><a href="{{url_for('auth.register')}}">Реєстрація</a></li>
+            {% endif %}
         </ul>
     </nav>
 </div>
 
 <style>
-    .header {
+    .logos-block {
         display: flex;
         align-items: center;
         justify-content: flex-end;
+        margin-bottom: 5px;
     }
-    .moz-icon-link {
+    .moz-logo-link {
         margin-right: auto;
+    }
+    .navigation {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .navigation .nav-pills li a {
+        padding: 15px 20px;
     }
     .header a:hover, .header a:visited, .header a:link, .header a:active {
         text-decoration: none;
