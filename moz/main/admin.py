@@ -86,8 +86,6 @@ class UserAdmin(ProtectedModelView):
     column_sortable_list = 'email'
     column_searchable_list = ('email', User.email)
     column_labels = dict(email=User.email.verbose_name,
-                         first_name=User.first_name.verbose_name,
-                         last_name=User.last_name.verbose_name,
                          active=User.active.verbose_name,
                          is_admin=User.is_admin.verbose_name
                          )
