@@ -1,7 +1,7 @@
 import os
-
 from datetime import datetime, timedelta
-from flask import render_template, Blueprint, current_app, send_from_directory, request, abort, make_response
+
+from flask import render_template, Blueprint, current_app, send_from_directory, request, make_response
 from flask_login import login_required
 
 from config import PROTOCOL, DOMAIN

@@ -3,6 +3,7 @@ import flask_login
 from flask import request, abort, flash
 from flask_admin import AdminIndexView, expose
 from flask_admin.contrib.peewee import ModelView
+from flask_wtf import FlaskForm
 from wtforms.fields import FileField, PasswordField
 from wtforms.fields.html5 import EmailField
 
@@ -26,6 +27,7 @@ class ProtectedIndex(AdminIndexView):
 
 
 class ProtectedModelView(ModelView):
+    form_base_class = FlaskForm
 
     def is_accessible(self):
         return is_user_admin(flask_login.current_user)
@@ -91,25 +93,20 @@ class UserAdmin(ProtectedModelView):
                          )
     form_overrides = dict(email=EmailField, password=PasswordField)
     can_view_details = True
+    can_create = False
+    can_edit = False
+    column_editable_list = ['is_admin']
 
-    def validate_form(self, form):
+    def create_model(self, form):
         if User.validate_password(form.password.data):
-            return super(UserAdmin, self).validate_form(form)
+            instance = super(UserAdmin, self).create_model(form)
+            instance.set_password(form.password.data)
+            instance.save()
+            return instance
+
         m = u'Пароль що введено не підпадає під вимоги щодо паролів. ' \
             u'Мінімальна довжина має бути не менеше %d символів. ' \
             u'Пароль не має складатися лише з одного символа що повторюєтся. ' \
             u'Пароль не має містити в собі лише цифри.' % MIN_PASSWORD_LENGTH
         flash(m, 'danger')
         return False
-
-    def create_model(self, form):
-        instance = super(UserAdmin, self).create_model(form)
-        instance.set_password(form.password.data)
-        instance.save()
-        return instance
-
-    def update_model(self, form, model):
-        result = super(UserAdmin, self).update_model(form, model)
-        model.set_password(model.password)
-        model.save()
-        return result
