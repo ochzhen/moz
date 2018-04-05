@@ -7,8 +7,9 @@ from flask import Flask, render_template
 from flask_babelex import Babel
 from flask_login import LoginManager
 from flask_mail import Mail
-from peewee import SqliteDatabase, DoesNotExist
+from peewee import DoesNotExist
 from flask_wtf.csrf import CSRFProtect
+from playhouse.pool import PooledMySQLDatabase
 
 from auth.views import auth as auth_module
 from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR, DEBUG
@@ -49,26 +50,24 @@ def apply_caching(response):
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Permitted-Cross-Domain-Policies"] = "none"
     response.headers["Referrer-Policy"] = "origin"
-    #  Uncomment if we will use HTTPS
-    # response.headers["Strict-Transport-Security"] = "max-age=31536000 ; includeSubDomains"
-    # response.headers["Public-Key-Pins"] = "pin-sha256=\"mypubkey\" max-age=10000; includeSubDomains"
     return response
 
 
-db = SqliteDatabase(os.path.join(BASE_DIR, 'moz.db'))
+# db = SqliteDatabase(os.path.join(BASE_DIR, 'moz.db'))
+
+db = PooledMySQLDatabase(
+    app.config['DB_NAME'],
+    user=app.config['DB_USER'],
+    password=app.config['DB_PASSWORD'],
+    host=app.config['DB_HOST'],
+    port=int(app.config['DB_PORT']),
+    max_connections=7,
+    stale_timeout=1000
+)
 
 from moz.auth.models import User
 from main.models import MOZDocument, Category
 from main.admin import MOZDocumentAdmin, CategoryAdmin, ProtectedIndex, UserAdmin
-
-
-# db = MySQLDatabase(
-#     app.config['DB_NAME'],
-#     user=app.config['DB_USER'],
-#     password=app.config['DB_PASSWORD'],
-#     host=app.config['DB_HOST'],
-#     port=int(app.config['DB_PORT'])
-# )
 
 
 def create_tables():
