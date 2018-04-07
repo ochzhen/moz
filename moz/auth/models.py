@@ -19,7 +19,7 @@ class User(UserMixin, BaseModel):
                       help_text=u'Це поле є унікальнім')
     speciality = CharField(max_length=128, null=False, verbose_name=u'Спеціальність')
     occupation = CharField(max_length=128, null=False, verbose_name=u'Місце роботи')
-    password = CharField(null=False, max_length=256, verbose_name=u'Пароль',
+    password = CharField(max_length=256, null=False, verbose_name=u'Пароль',
                          help_text=u'Пароль зберігаєтся у шифрованому виді')
     active = BooleanField(null=False, default=False, verbose_name=u'Користувач пітверджений')
     is_admin = BooleanField(null=False, default=False, verbose_name=u'Аккаунт адміністратора',

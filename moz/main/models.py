@@ -1,8 +1,8 @@
 # coding=utf-8
 import datetime
+import errno
 import os
 
-import errno
 from peewee import Model, TextField, DateTimeField, CharField, AutoField, ForeignKeyField
 from werkzeug.utils import secure_filename
 
@@ -29,7 +29,7 @@ class MOZDocument(BaseModel):
     id = AutoField(null=False, index=True, unique=True, primary_key=True)
 
     title = CharField(null=False,
-                      max_length=256,
+                      max_length=512,
                       help_text=u"Назва файлу що буде відображатися користувачям",
                       verbose_name=u"Заголовок")
 
