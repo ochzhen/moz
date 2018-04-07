@@ -97,9 +97,6 @@ from main.views import main as main_module
 
 app.register_blueprint(main_module)
 app.register_blueprint(auth_module)
-if DEBUG:
-    create_tables()
-    create_admin_user()
 
 adm = admin.Admin(app, template_mode='bootstrap3', name='moz', url=ADMIN_PATH,
                   index_view=ProtectedIndex())

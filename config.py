@@ -1,6 +1,6 @@
 import os
 
-DEBUG = True
+DEBUG = False
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 SECRET_KEY = os.environ.get('MOZ_SECRET_KEY', 'SUPER_SECRET_KEY')
 SECURITY_PASSWORD_SALT = '16756d01a4bbbfa4800b3af15953ada021ec508e'
