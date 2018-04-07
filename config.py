@@ -1,4 +1,5 @@
 import os
+import logging
 
 DEBUG = True
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -33,3 +34,9 @@ MAIL_PASSWORD = os.environ.get('APP_MAIL_PASSWORD', '')
 MAIL_DEFAULT_SENDER = 'noreply.moz@gmail.com'
 REMEMBER_COOKIE_REFRESH_EACH_REQUEST = True
 REMEMBER_COOKIE_DURATION = 86400  # 1 day
+
+# logging
+LOGGING_FOLDER = os.path.join(BASE_DIR, 'logs')
+LOGGING_FILENAME = 'moz.log'
+LOGGING_LEVEL = logging.WARNING
+LOGGING_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
