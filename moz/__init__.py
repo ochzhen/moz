@@ -1,18 +1,17 @@
 # coding=utf-8
 import datetime
-import os
 
 import flask_admin as admin
 from flask import Flask, render_template
 from flask_babelex import Babel
 from flask_login import LoginManager
 from flask_mail import Mail
-from peewee import DoesNotExist
 from flask_wtf.csrf import CSRFProtect
+from peewee import DoesNotExist
 from playhouse.pool import PooledMySQLDatabase
 
 from auth.views import auth as auth_module
-from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR, DEBUG
+from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, DEBUG
 
 app = Flask(__name__, static_folder='static')
 babel = Babel(app)
@@ -101,9 +100,11 @@ app.register_blueprint(auth_module)
 if DEBUG:
     create_tables()
     create_admin_user()
+
 adm = admin.Admin(app, template_mode='bootstrap3', name='moz', url=ADMIN_PATH,
                   index_view=ProtectedIndex())
 adm.add_view(UserAdmin(User, name=u'Користувачі'))
 adm.add_view(CategoryAdmin(Category, name=u'Категорії'))
 adm.add_view(MOZDocumentAdmin(MOZDocument, name=u'Документи МОЗ'))
 csrf = CSRFProtect(app)
+
