@@ -90,10 +90,6 @@ body {
 }
 
 .document-title {
-    font-size: 18px;
+    font-size: 15px;
+    margin-left: 10px;
 }
-
-/* a:hover, a:visited, a:link, a:active {
-    text-decoration: none;
-    color: black;
-} */
