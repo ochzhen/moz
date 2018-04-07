@@ -1,7 +1,6 @@
 # coding: utf-8
 import datetime
-
-from flask import render_template, Blueprint, flash, redirect, url_for, request
+from flask import current_app, render_template, Blueprint, flash, redirect, url_for, request, abort
 from flask_login import current_user, login_user, logout_user, login_required
 
 from moz.auth.email import send_email
@@ -56,7 +55,11 @@ def register():
         confirm_url = url_for('auth.confirm_email', token=token, _external=True)
         html = render_template('email/activate.html', confirm_url=confirm_url)
         subject = u'Підтвердження електронної адреси'
-        send_email(user.email, subject, html)
+        try:
+            send_email(user.email, subject, html)
+        except Exception as e:
+            current_app.logger.error('Email sending error (registration): %s', (e))
+            return render_template('500.html')
 
         login_user(user)
 
@@ -103,7 +106,11 @@ def resend_confirmation():
     confirm_url = url_for('auth.confirm_email', token=token, _external=True)
     html = render_template('email/activate.html', confirm_url=confirm_url)
     subject = u'Підтвердження електронної адреси'
-    send_email(current_user.email, subject, html)
+    try:
+        send_email(current_user.email, subject, html)
+    except Exception as e:
+        current_app.logger.error('Email sending error (resending confirmation): %s', (e))
+        return render_template('500.html')
     flash(u'Було надіслано нове електронне підтвердження.', 'success')
     return redirect(url_for('auth.unconfirmed'))
 
@@ -122,8 +129,12 @@ def forgot_password():
         reset_password_url = url_for('auth.reset_password', token=token, _external=True)
         body = render_template('email/reset_password.html', reset_password_url=reset_password_url)
         subject = u'Відновлення паролю'
-        send_email(user.email, subject, body)
-
+        try:
+            send_email(user.email, subject, body)
+        except Exception as e:
+            current_app.logger.error('Email sending error (forgot password): %s', (e))
+            return render_template('500.html')
+        
         return render_template('reset_link_sent.html')
 
     return render_template('forgot_password.html', form=form)

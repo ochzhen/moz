@@ -7,3 +7,4 @@ venv
 moz.db
 !media/moz/.gitkeep
 media/*
+logs

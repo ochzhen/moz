@@ -1,13 +1,13 @@
 import os
 from datetime import datetime, timedelta
 
-from flask import render_template, Blueprint, current_app, send_from_directory, request, make_response
-from flask_login import login_required
+from flask import render_template, Blueprint, current_app, send_from_directory, request, make_response, abort
+from flask_login import login_required, current_user
 
 from config import PROTOCOL, DOMAIN
 from moz import app
 from moz.auth.email import check_confirmed
-from services import get_categories_with_documents, get_documents_for_query
+from services import get_categories_with_documents, get_documents_for_query, is_user_admin
 
 main = Blueprint('main', __name__, template_folder='templates')
 
@@ -15,6 +15,19 @@ main = Blueprint('main', __name__, template_folder='templates')
 @main.route('/')
 def index():
     return render_template('home.html')
+
+
+@main.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static', 'favicon.ico')
+
+
+@main.route('/log')
+@login_required
+def download_log():
+    if not is_user_admin(current_user):
+        abort(404)
+    return send_from_directory(app.config['LOGGING_FOLDER'], app.config['LOGGING_FILENAME'])
 
 
 @main.route('/documents')
@@ -25,13 +38,6 @@ def documents_list():
     current_app.logger.info("Found categories with documents %s for template documents_list.html",
                             categories_with_documents)
     return render_template('documents_list.html', categories=categories_with_documents)
-
-
-@main.route('/documents/<int:id>')
-@login_required
-@check_confirmed
-def view_document(id):
-    return render_template('document.html')
 
 
 @main.route(app.config.get('MEDIA_URL') + '/<filename>')
@@ -57,6 +63,7 @@ def search():
 @main.route('/terms_of_use')
 def terms_of_use():
     return render_template('terms_of_use.html')
+
 
 @main.route('/sitemap.xml', methods=['GET'])
 def sitemap():

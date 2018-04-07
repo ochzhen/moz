@@ -2,7 +2,7 @@
 import datetime
 
 import flask_admin as admin
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_babelex import Babel
 from flask_login import LoginManager
 from flask_mail import Mail
@@ -13,9 +13,25 @@ from playhouse.pool import PooledMySQLDatabase
 from auth.views import auth as auth_module
 from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, DEBUG
 
+
 app = Flask(__name__, static_folder='static')
 babel = Babel(app)
 app.config.from_object('config')
+
+import logging
+from logging.handlers import RotatingFileHandler
+
+if not os.path.exists(app.config['LOGGING_FOLDER']):
+    os.makedirs(app.config['LOGGING_FOLDER'])
+
+logging_location = os.path.join(app.config['LOGGING_FOLDER'], app.config['LOGGING_FILENAME'])
+
+file_handler = RotatingFileHandler(logging_location, maxBytes=1000000, backupCount=1)
+file_handler.setLevel(app.config['LOGGING_LEVEL'])
+file_formatter = logging.Formatter(app.config['LOGGING_FORMAT'])
+file_handler.setFormatter(file_formatter)
+app.logger.setLevel(app.config['LOGGING_LEVEL'])
+app.logger.addHandler(file_handler)
 
 login = LoginManager()
 login.session_protection = 'strong'
@@ -39,7 +55,20 @@ def load_user(user_id):
 
 @app.errorhandler(404)
 def not_found(error):
+    app.logger.warning('Page not found: %s', (request.path))
     return render_template('404.html')
+
+
+@app.errorhandler(500)
+def server_error(error):
+    app.logger.error('Server Error: %s', (error))
+    return render_template('500.html')
+
+
+@app.errorhandler(Exception)
+def unhandled_exception(e):
+    app.logger.error('Unhandled Exception: %s', (e))
+    return render_template('500.html')
 
 
 @app.after_request
