@@ -90,7 +90,7 @@ db = PooledMySQLDatabase(
     host=app.config['DB_HOST'],
     port=int(app.config['DB_PORT']),
     max_connections=7,
-    stale_timeout=1000
+    stale_timeout=10000
 )
 
 from moz.auth.models import User
