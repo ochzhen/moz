@@ -81,11 +81,11 @@ body {
 
 .keyword-title {
     text-align: center;
+    font-size: 22px;
 }
 
 .keyword {
     font-weight: bold;
-    font-size: larger;
     color: dimgrey;
 }
 
