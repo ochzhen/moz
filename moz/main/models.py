@@ -30,7 +30,7 @@ class MOZDocument(BaseModel):
 
     title = CharField(null=False,
                       max_length=512,
-                      help_text=u"Назва файлу що буде відображатися користувачям",
+                      help_text=u"Назва файлу що буде відображатися користувачам",
                       verbose_name=u"Заголовок")
 
     description = TextField(null=False,
