@@ -7,7 +7,7 @@ from flask_login import login_required, current_user
 from config import PROTOCOL, DOMAIN
 from moz import app
 from moz.auth.email import check_confirmed
-from services import get_categories_with_documents, get_documents_for_query, is_user_admin
+from services import get_categories_with_documents, get_documents_for_query, is_user_admin, get_document_by_id
 
 main = Blueprint('main', __name__, template_folder='templates')
 
@@ -40,12 +40,18 @@ def documents_list():
     return render_template('documents_list.html', categories=categories_with_documents)
 
 
-@main.route(app.config.get('MEDIA_URL') + '/<filename>')
+@main.route('/documents/<id>')
 @login_required
-def get_moz_document(filename):
+@check_confirmed
+def document(id):
+    if not id:
+        abort(404)
     folder = os.path.join(app.config.get('MEDIA_ROOT'), 'moz')
-    current_app.logger.info("Looking for file %s in folder %s", filename, folder)
-    return send_from_directory(folder, filename)
+    document = get_document_by_id(id)
+    if not document:
+        abort(404)
+    current_app.logger.info("Looking for file %s in folder %s", document.file, folder)
+    return send_from_directory(folder, document.file)
 
 
 @main.route('/search')

@@ -23,7 +23,7 @@
                             {% for d in c.documents %}
                                 <li class="list-group-item">
                                     <i class="fa fa-file-pdf-o" style="font-size:18px;color:red"> </i>
-                                    <a href="{{ d.get_file_url() }}" target="_blank">
+                                    <a href="{{ d.get_url() }}" target="_blank">
                                         <span class="document-title">{{ d.title }}</span>
                                     </a>
                                 </li>
