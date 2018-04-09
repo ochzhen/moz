@@ -13,7 +13,6 @@ from playhouse.pool import PooledMySQLDatabase
 from auth.views import auth as auth_module
 from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, DEBUG
 
-
 app = Flask(__name__, static_folder='static')
 babel = Babel(app)
 app.config.from_object('config')
@@ -134,3 +133,24 @@ adm.add_view(CategoryAdmin(Category, name=u'Категорії'))
 adm.add_view(MOZDocumentAdmin(MOZDocument, name=u'Документи МОЗ'))
 csrf = CSRFProtect(app)
 
+import atexit
+
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
+
+
+def ping_database():
+    from moz import db
+    db.execute_sql('select 1;')
+
+
+scheduler = BackgroundScheduler()
+scheduler.start()
+scheduler.add_job(
+    func=ping_database,
+    trigger=IntervalTrigger(hours=1),
+    id='ping_job',
+    name='Ping database every hour',
+    replace_existing=True)
+# Shut down the scheduler when exiting the app
+atexit.register(lambda: scheduler.shutdown())
