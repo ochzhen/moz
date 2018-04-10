@@ -21,3 +21,6 @@ def get_documents_for_query(query):
             return []
         return documents
     return []
+
+def get_document_by_id(id):
+    return MOZDocument.select().where(MOZDocument.id == id).first()
