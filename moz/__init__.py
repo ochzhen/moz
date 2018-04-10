@@ -13,7 +13,6 @@ from peewee import SqliteDatabase, DoesNotExist
 from auth.views import auth as auth_module
 from config import ADMIN_PATH, DEFAULT_ADMIN_PASSWORD, DEFAULT_ADMIN_USER, BASE_DIR, DEBUG
 
-
 app = Flask(__name__, static_folder='static')
 babel = Babel(app)
 app.config.from_object('config')
@@ -139,3 +138,15 @@ adm.add_view(CategoryAdmin(Category, name=u'Категорії'))
 adm.add_view(MOZDocumentAdmin(MOZDocument, name=u'Документи МОЗ'))
 csrf = CSRFProtect(app)
 
+
+@app.before_request
+def _db_connect():
+    from moz import db
+    db.connect()
+
+
+@app.teardown_request
+def _db_close(exc):
+    from moz import db
+    if not db.is_closed():
+        db.close()
