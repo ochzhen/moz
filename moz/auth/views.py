@@ -14,16 +14,30 @@ auth = Blueprint('auth', __name__, template_folder='templates')
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
+    
     form = LoginForm(request.form)
     if form.validate_on_submit():
         from moz.auth.models import User
-        user = User.select().where(User.email == form.email.data).first()
+        user = User.select().where(User.email == form.email.data.lower()).first()
         if user is None or not user.check_password(form.password.data):
             flash(u'Невірний email або пароль', 'danger')
             return render_template('login.html', form=form)
+
+        if not user.is_admin and not ua_located(request.remote_addr):
+            return redirect(url_for('auth.forbidden'))
+
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('main.index'))
     return render_template('login.html', form=form)
+
+
+def ua_located(ipadress):
+    return False
+
+
+@auth.route('/forbidden')
+def forbidden():
+    return render_template('forbidden.html')
 
 
 @auth.route('/logout')
@@ -41,7 +55,7 @@ def register():
     if form.validate_on_submit():
         from moz.auth.models import User
         user = User(
-            email=form.email.data,
+            email=form.email.data.lower(),
             active=False,
             is_admin=False,
             registered_at=datetime.datetime.now(),
@@ -120,7 +134,7 @@ def forgot_password():
     form = ForgotPasswordForm(request.form)
     if form.validate_on_submit():
         from moz.auth.models import User
-        user = User.select().where(User.email == form.email.data).first()
+        user = User.select().where(User.email == form.email.data.lower()).first()
         if user is None:
             form.email.errors.append(u'Користувача з вказаним email не існує.')
             return render_template('forgot_password.html', form=form)
