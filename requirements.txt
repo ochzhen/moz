@@ -19,3 +19,4 @@ speaklater==1.3
 Werkzeug==0.14.1
 wtf-peewee==3.0.0
 WTForms==2.1
+requests==2.18.4
