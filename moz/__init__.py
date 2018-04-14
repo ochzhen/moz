@@ -133,24 +133,3 @@ adm.add_view(CategoryAdmin(Category, name=u'Категорії'))
 adm.add_view(MOZDocumentAdmin(MOZDocument, name=u'Документи МОЗ'))
 csrf = CSRFProtect(app)
 
-import atexit
-
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.triggers.interval import IntervalTrigger
-
-
-def ping_database():
-    from moz import db
-    db.execute_sql('select 1;')
-
-
-scheduler = BackgroundScheduler()
-scheduler.start()
-scheduler.add_job(
-    func=ping_database,
-    trigger=IntervalTrigger(hours=1),
-    id='ping_job',
-    name='Ping database every hour',
-    replace_existing=True)
-# Shut down the scheduler when exiting the app
-atexit.register(lambda: scheduler.shutdown())
