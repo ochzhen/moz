@@ -6,6 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from moz.auth.email import send_email
 from moz.auth.forms import LoginForm, RegisterForm, ForgotPasswordForm, ResetPasswordForm
 from moz.auth.token import confirm_token, generate_token
+from moz.auth.services import get_country_code
 
 auth = Blueprint('auth', __name__, template_folder='templates')
 
@@ -23,7 +24,7 @@ def login():
             flash(u'Невірний email або пароль', 'danger')
             return render_template('login.html', form=form)
 
-        if not user.is_admin and not ua_located(request.remote_addr):
+        if not geolocation_allowed(user, request.remote_addr):
             return redirect(url_for('auth.forbidden'))
 
         login_user(user, remember=form.remember_me.data)
@@ -31,7 +32,17 @@ def login():
     return render_template('login.html', form=form)
 
 
-def ua_located(ipadress):
+def geolocation_allowed(user, ipaddress):
+    if user.is_admin:
+        return True
+    
+    country_code = get_country_code(ipaddress)
+    
+    if country_code == 'UA':
+        return True
+
+    current_app.logger.warning(
+        'Access restricted. User: %s, Country code: %s', user.email, country_code)
     return False
 
 

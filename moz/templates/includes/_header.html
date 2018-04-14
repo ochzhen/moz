@@ -9,6 +9,9 @@
     </div>
     <nav class="navigation">
         <ul class="nav nav-pills">
+            {% if current_user.is_admin %}
+                <li role="presentation"><a href="/admin">Адмін</a></li>
+            {% endif %}
             <li role="presentation"><a href="{{url_for('main.index')}}">Головна</a></li>
             <li role="presentation"><a href="{{url_for('main.documents_list')}}">Протоколи</a></li>
             {% if current_user.is_authenticated %}
