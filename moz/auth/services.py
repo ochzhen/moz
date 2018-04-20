@@ -17,7 +17,7 @@ def get_country_code(ipaddress):
     if code:
         return code
 
-    return ''
+    return 'UA'
 
 
 def country_code_by_ip_api(ip):
