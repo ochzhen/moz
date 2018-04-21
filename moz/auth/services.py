@@ -26,13 +26,11 @@ def country_code_by_ip_api(ip):
     try:
         r = requests.get(url, params=params)
         data = r.json()
-        current_app.logger.warning(str(data))
-        if r.status_code != requests.codes.ok or data['status'] == 'fail':
+        if r.status_code != requests.codes.ok or data['status'].lower() == 'fail':
             current_app.logger.error(
                 'Geolocation api status FAIL: %s\t%s\t%s', r.status_code, url, data['message'])
             return None
         code = data['countryCode'].upper()
-        current_app.logger.warning('Country code: %s , url: %s', code, url)
         return code
     except Exception as e:
         current_app.logger.error('Geolocation api exception: %s\t%s', url, str(e))
@@ -43,13 +41,11 @@ def country_code_by_geoip_nekudo(ip):
     try:
         r = requests.get(url)
         data = r.json()
-        current_app.logger.warning(str(data))
-        if r.status_code != requests.codes.ok or ('type' in data and data['type'] == 'error'):
+        if r.status_code != requests.codes.ok or ('type' in data and data['type'].lower() == 'error'):
             current_app.logger.error(
-                'Geolocation api error: %s\t%s\t', r.status_code, url, data['msg'])
+                'Geolocation api error: %s\t%s\t%s', r.status_code, url, data['msg'])
             return None
-        code = data['country'].['code'].upper()
-        current_app.logger.warning('Country code: %s , url: %s', code, url)
+        code = data['country']['code'].upper()
         return code
     except Exception as e:
         current_app.logger.error('Geolocation api exception: %s\t%s', url, str(e))
@@ -61,13 +57,11 @@ def country_code_by_geoplugin(ip):
     try:
         r = requests.get(url, params=params)
         data = r.json()
-        current_app.logger.warning(str(data))
         if r.status_code != requests.codes.ok or data['geoplugin_status'] != 200:
             current_app.logger.error(
                 'Geolocation api error: %s\t%s\t%s', r.status_code, url, data['geoplugin_status'])
             return None
         code = data['geoplugin_countryCode'].upper()
-        current_app.logger.warning('Country code: %s , url: %s', code, url)
         return code
     except Exception as e:
         current_app.logger.error('Geolocation api exception: %s\t%s', url, str(e))
