@@ -24,7 +24,7 @@ def login():
             flash(u'Невірний email або пароль', 'danger')
             return render_template('login.html', form=form)
 
-        if not geolocation_allowed(user, request.remote_addr):
+        if not geolocation_allowed(request.remote_addr, user):
             return redirect(url_for('auth.forbidden'))
 
         login_user(user, remember=form.remember_me.data)
@@ -32,8 +32,8 @@ def login():
     return render_template('login.html', form=form)
 
 
-def geolocation_allowed(user, ipaddress):
-    if user.is_admin:
+def geolocation_allowed(ipaddress, user):
+    if user and user.is_admin:
         return True
     
     country_code = get_country_code(ipaddress)
@@ -41,8 +41,12 @@ def geolocation_allowed(user, ipaddress):
     if country_code == 'UA':
         return True
 
-    current_app.logger.warning(
-        'Access restricted. User: %s, Country code: %s', user.email, country_code)
+    if not user:
+        current_app.logger.warning(
+            'Registration restricted. Country code: %s', country_code)
+    else:
+        current_app.logger.warning(
+            'Access restricted. User: %s, Country code: %s', user.email, country_code)
     return False
 
 
@@ -64,6 +68,8 @@ def register():
         return redirect(url_for('main.index'))
     form = RegisterForm(request.form)
     if form.validate_on_submit():
+        if not geolocation_allowed(request.remote_addr, None):
+            return redirect(url_for('auth.forbidden'))
         from moz.auth.models import User
         user = User(
             email=form.email.data.lower(),
