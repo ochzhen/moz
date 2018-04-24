@@ -19,6 +19,7 @@ MIN_PASSWORD_LENGTH = 8
 
 PROTOCOL = 'http://'
 DOMAIN = 'localhost:5000'
+CHECK_LOCATION = False if os.environ.get('CHECK_LOCATION', True) == 'False' else True
 
 # mail settings
 MAIL_SERVER = 'smtp.googlemail.com'

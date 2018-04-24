@@ -6,6 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from moz.auth.email import send_email
 from moz.auth.forms import LoginForm, RegisterForm, ForgotPasswordForm, ResetPasswordForm
 from moz.auth.token import confirm_token, generate_token
+from moz.auth.services import get_country_code
 
 auth = Blueprint('auth', __name__, template_folder='templates')
 
@@ -14,16 +15,44 @@ auth = Blueprint('auth', __name__, template_folder='templates')
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
+    
     form = LoginForm(request.form)
     if form.validate_on_submit():
         from moz.auth.models import User
-        user = User.select().where(User.email == form.email.data).first()
+        user = User.select().where(User.email == form.email.data.lower()).first()
         if user is None or not user.check_password(form.password.data):
             flash(u'Невірний email або пароль', 'danger')
             return render_template('login.html', form=form)
+
+        if not geolocation_allowed(request.remote_addr, user):
+            return redirect(url_for('auth.forbidden'))
+
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('main.index'))
     return render_template('login.html', form=form)
+
+
+def geolocation_allowed(ipaddress, user):
+    if user and user.is_admin:
+        return True
+    
+    country_code = get_country_code(ipaddress)
+    
+    if country_code == 'UA':
+        return True
+
+    if not user:
+        current_app.logger.warning(
+            'Registration restricted. Country code: %s', country_code)
+    else:
+        current_app.logger.warning(
+            'Access restricted. User: %s, Country code: %s', user.email, country_code)
+    return False
+
+
+@auth.route('/forbidden')
+def forbidden():
+    return render_template('forbidden.html')
 
 
 @auth.route('/logout')
@@ -39,9 +68,11 @@ def register():
         return redirect(url_for('main.index'))
     form = RegisterForm(request.form)
     if form.validate_on_submit():
+        if not geolocation_allowed(request.remote_addr, None):
+            return redirect(url_for('auth.forbidden'))
         from moz.auth.models import User
         user = User(
-            email=form.email.data,
+            email=form.email.data.lower(),
             active=False,
             is_admin=False,
             registered_at=datetime.datetime.now(),
@@ -120,7 +151,7 @@ def forgot_password():
     form = ForgotPasswordForm(request.form)
     if form.validate_on_submit():
         from moz.auth.models import User
-        user = User.select().where(User.email == form.email.data).first()
+        user = User.select().where(User.email == form.email.data.lower()).first()
         if user is None:
             form.email.errors.append(u'Користувача з вказаним email не існує.')
             return render_template('forgot_password.html', form=form)
