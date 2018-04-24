@@ -3,6 +3,10 @@ from flask import current_app
 
 
 def get_country_code(ipaddress):
+    from config import CHECK_LOCATION
+    if not CHECK_LOCATION:
+        return 'UA'
+
     ip = str(ipaddress)
     
     code = country_code_by_ip_api(ip)

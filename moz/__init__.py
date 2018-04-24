@@ -142,7 +142,8 @@ csrf = CSRFProtect(app)
 @app.before_request
 def _db_connect():
     from moz import db
-    db.connect()
+    if db.is_closed():
+        db.connect()
 
 
 @app.teardown_request
