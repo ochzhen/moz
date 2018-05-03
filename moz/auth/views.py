@@ -24,7 +24,7 @@ def login():
             flash(u'Невірний email або пароль', 'danger')
             return render_template('login.html', form=form)
 
-        if not geolocation_allowed(request.remote_addr, user):
+        if not geolocation_allowed( get_ip(), user):
             return redirect(url_for('auth.forbidden'))
 
         login_user(user, remember=form.remember_me.data)
@@ -49,6 +49,11 @@ def geolocation_allowed(ipaddress, user):
             'Access restricted. User: %s, Country code: %s', user.email, country_code)
     return False
 
+def get_ip():
+    if 'X-Forwarded-For' in request.headers:
+        return request.headers.getlist("X-Forwarded-For")[0].rpartition(' ')[-1]
+    else:
+        return request.remote_addr or 'untrackable'
 
 @auth.route('/forbidden')
 def forbidden():
@@ -68,7 +73,7 @@ def register():
         return redirect(url_for('main.index'))
     form = RegisterForm(request.form)
     if form.validate_on_submit():
-        if not geolocation_allowed(request.remote_addr, None):
+        if not geolocation_allowed(get_ip(), None):
             return redirect(url_for('auth.forbidden'))
         from moz.auth.models import User
         user = User(
