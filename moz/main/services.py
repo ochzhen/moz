@@ -17,9 +17,10 @@ def get_documents_for_query(query):
     if type(query) == str or type(query) == unicode:
         query = u'%%%s%%' % query
         documents = MOZDocument.select().where(MOZDocument.title.contains(query)).order_by(MOZDocument.title.asc())
-        if not documents or len(documents) == 0:
+        categories = Category.select().order_by(Category.title.asc())
+        if not documents or len(documents) == 0 or not categories or len(categories) == 0:
             return []
-        return documents
+        return prefetch(categories, documents)
     return []
 
 def get_document_by_id(id):

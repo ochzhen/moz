@@ -61,9 +61,9 @@ def search():
     query = request.args.get('query')
     query = query if query else ""
     query = u"%s" % query
-    documents = get_documents_for_query(query)
-    current_app.logger.info(u"Found documents: %s for query: %s", documents, query)
-    return render_template('search.html', query=query, documents=documents)
+    categories_with_documents = get_documents_for_query(query)
+    current_app.logger.info(u"Found documents: %s for query: %s", categories_with_documents, query)
+    return render_template('search.html', query=query, categories=categories_with_documents)
 
 
 @main.route('/terms_of_use')
@@ -93,4 +93,4 @@ def sitemap():
 
 @app.route('/robots.txt')
 def static_from_root():
- return send_from_directory(app.static_folder, request.path[1:])
+    return send_from_directory(app.static_folder, request.path[1:])
