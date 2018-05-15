@@ -78,7 +78,7 @@ def register():
         from moz.auth.models import User
         user = User(
             email=form.email.data.lower(),
-            active=True,
+            active=True ,
             is_admin=False,
             registered_at=datetime.datetime.now(),
             speciality=form.speciality.data,
