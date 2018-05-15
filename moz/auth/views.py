@@ -78,7 +78,7 @@ def register():
         from moz.auth.models import User
         user = User(
             email=form.email.data.lower(),
-            active=False,
+            active=True,
             is_admin=False,
             registered_at=datetime.datetime.now(),
             speciality=form.speciality.data,
@@ -91,16 +91,16 @@ def register():
         confirm_url = url_for('auth.confirm_email', token=token, _external=True)
         html = render_template('email/activate.html', confirm_url=confirm_url)
         subject = u'Підтвердження електронної адреси'
-        try:
-            send_email(user.email, subject, html)
-        except Exception as e:
-            current_app.logger.error('Email sending error (registration): %s', (e))
-            return render_template('500.html')
+        # try:
+        #     # send_email(user.email, subject, html)
+        # except Exception as e:
+        #     current_app.logger.error('Email sending error (registration): %s', (e))
+        #     return render_template('500.html')
 
         login_user(user)
 
-        flash(u'Вітаємо, тепер Ви зареєстрований користувач! Підтвердіть будь ласка свій email.', 'info')
-        return redirect(url_for("auth.unconfirmed"))
+        # flash(u'Вітаємо, тепер Ви зареєстрований користувач! Підтвердіть будь ласка свій email.', 'info')
+        return redirect(url_for("main.index"))
     return render_template('register.html', form=form)
 
 
