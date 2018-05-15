@@ -95,7 +95,7 @@ class UserAdmin(ProtectedModelView):
     can_view_details = True
     can_create = False
     can_edit = False
-    column_editable_list = ['is_admin']
+    column_editable_list = ['is_admin', 'active']
 
     def create_model(self, form):
         if User.validate_password(form.password.data):
