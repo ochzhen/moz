@@ -41,3 +41,7 @@ LOGGING_FOLDER = os.path.join(BASE_DIR, 'logs')
 LOGGING_FILENAME = 'moz.log'
 LOGGING_LEVEL = logging.WARNING
 LOGGING_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
+# recapcha
+RECAPTCHA_PUBLIC_KEY = '6LdEnFkUAAAAAPTmtd_dwd_8clh__PoCHyURE2lN'
+RECAPTCHA_PRIVATE_KEY = '6LdEnFkUAAAAAILYxhuBtNk4lkGrOAZPt5SgiAdo'
