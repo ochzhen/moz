@@ -22,17 +22,15 @@ DOMAIN = 'localhost:5000'
 CHECK_LOCATION = False if os.environ.get('CHECK_LOCATION', True) == 'False' else True
 
 # mail settings
-MAIL_SERVER = 'smtp.googlemail.com'
-MAIL_PORT = 465
-MAIL_USE_TLS = False
-MAIL_USE_SSL = True
-
-# gmail authentication
+MAIL_SERVER = 'email-smtp.eu-west-1.amazonaws.com'
+MAIL_PORT = 25
+MAIL_USE_TLS = True
+MAIL_USE_SSL = False
 MAIL_USERNAME = os.environ.get('APP_MAIL_USERNAME', '')
 MAIL_PASSWORD = os.environ.get('APP_MAIL_PASSWORD', '')
+MAIL_DEFAULT_SENDER = 'moz.noreply@gmail.com'
 
-# mail accounts
-MAIL_DEFAULT_SENDER = 'noreply.moz@gmail.com'
+# Cookies
 REMEMBER_COOKIE_REFRESH_EACH_REQUEST = True
 REMEMBER_COOKIE_DURATION = 86400  # 1 day
 
