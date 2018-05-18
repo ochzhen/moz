@@ -96,9 +96,7 @@ def register():
         except Exception as e:
             current_app.logger.error('Email sending error (registration): %s', (e))
             return render_template('500.html')
-
         login_user(user)
-
         flash(u'Вітаємо, тепер Ви зареєстрований користувач! Підтвердіть будь ласка свій email.', 'info')
         return redirect(url_for("auth.unconfirmed"))
     return render_template('register.html', form=form)
@@ -131,7 +129,7 @@ def confirm_email(token):
 @login_required
 def unconfirmed():
     if current_user.active:
-        return redirect('main.index')
+        return redirect(url_for('main.index'))
     return render_template('unconfirmed.html')
 
 
