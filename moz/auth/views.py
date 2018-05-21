@@ -15,7 +15,7 @@ auth = Blueprint('auth', __name__, template_folder='templates')
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
-    
+
     form = LoginForm(request.form)
     if form.validate_on_submit():
         from moz.auth.models import User
@@ -24,7 +24,7 @@ def login():
             flash(u'Невірний email або пароль', 'danger')
             return render_template('login.html', form=form)
 
-        if not geolocation_allowed( get_ip(), user):
+        if not geolocation_allowed(get_ip(), user):
             return redirect(url_for('auth.forbidden'))
 
         login_user(user, remember=form.remember_me.data)
@@ -35,9 +35,9 @@ def login():
 def geolocation_allowed(ipaddress, user):
     if user and user.is_admin:
         return True
-    
+
     country_code = get_country_code(ipaddress)
-    
+
     if country_code == 'UA':
         return True
 
@@ -49,11 +49,13 @@ def geolocation_allowed(ipaddress, user):
             'Access restricted. User: %s, Country code: %s', user.email, country_code)
     return False
 
+
 def get_ip():
     if 'X-Forwarded-For' in request.headers:
         return request.headers.getlist("X-Forwarded-For")[0].rpartition(' ')[-1]
     else:
         return request.remote_addr or 'untrackable'
+
 
 @auth.route('/forbidden')
 def forbidden():
@@ -78,7 +80,7 @@ def register():
         from moz.auth.models import User
         user = User(
             email=form.email.data.lower(),
-            active=True ,
+            active=True,
             is_admin=False,
             registered_at=datetime.datetime.now(),
             speciality=form.speciality.data,
@@ -91,16 +93,14 @@ def register():
         confirm_url = url_for('auth.confirm_email', token=token, _external=True)
         html = render_template('email/activate.html', confirm_url=confirm_url)
         subject = u'Підтвердження електронної адреси'
-        # try:
-        #     # send_email(user.email, subject, html)
-        # except Exception as e:
-        #     current_app.logger.error('Email sending error (registration): %s', (e))
-        #     return render_template('500.html')
-
+        try:
+            send_email(user.email, subject, html)
+        except Exception as e:
+            current_app.logger.error('Email sending error (registration): %s', (e))
+            return render_template('500.html')
         login_user(user)
-
-        # flash(u'Вітаємо, тепер Ви зареєстрований користувач! Підтвердіть будь ласка свій email.', 'info')
-        return redirect(url_for("main.index"))
+        flash(u'Вітаємо, тепер Ви зареєстрований користувач! Підтвердіть будь ласка свій email.', 'info')
+        return redirect(url_for("auth.unconfirmed"))
     return render_template('register.html', form=form)
 
 
@@ -112,7 +112,7 @@ def confirm_email(token):
     except:
         return redirect(url_for('auth.invalid_link'))
     from moz.auth.models import User
-    user = User.select().where(User.email==email).first()
+    user = User.select().where(User.email == email).first()
 
     if user.email != current_user.email:
         return redirect(url_for('auth.invalid_link'))
@@ -131,7 +131,7 @@ def confirm_email(token):
 @login_required
 def unconfirmed():
     if current_user.active:
-        return redirect('main.index')
+        return redirect(url_for('main.index'))
     return render_template('unconfirmed.html')
 
 
@@ -160,7 +160,7 @@ def forgot_password():
         if user is None:
             form.email.errors.append(u'Користувача з вказаним email не існує.')
             return render_template('forgot_password.html', form=form)
-        
+
         token = generate_token(user.email)
         reset_password_url = url_for('auth.reset_password', token=token, _external=True)
         body = render_template('email/reset_password.html', reset_password_url=reset_password_url)
@@ -170,7 +170,7 @@ def forgot_password():
         except Exception as e:
             current_app.logger.error('Email sending error (forgot password): %s', (e))
             return render_template('500.html')
-        
+
         return render_template('reset_link_sent.html')
 
     return render_template('forgot_password.html', form=form)
@@ -197,7 +197,7 @@ def reset_password(token):
         if current_user.is_authenticated:
             logout_user()
         return redirect(url_for('auth.login'))
-    
+
     flash(u'Введіть свій новий пароль.', 'info')
     return render_template('reset_password.html', form=form)
 

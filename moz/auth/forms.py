@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, BooleanField, SubmitField, PasswordField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired, EqualTo, Email, ValidationError, Length, Regexp
@@ -67,6 +67,7 @@ class RegisterForm(FlaskForm):
         u'Я підтверджую, що я медичний працівник.',
         validators=[DataRequired(message=u'Обов\'язкове поле')]
     )
+    recaptcha = RecaptchaField()
     submit = SubmitField(u'Зареєструвати')
 
     def validate_email(self, email):
